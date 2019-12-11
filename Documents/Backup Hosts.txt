@@ -1,0 +1,125 @@
+# Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+3.57.195.90    api8257.api-wi.com
+3.57.155.199   DockerBuild1.api-wi.com
+3.57.155.77    NPMREPO.api-wi.com
+3.57.155.168   SCBuild1.api-wi.com
+3.57.155.168   SC-docs.api-wi.com
+3.57.155.146   TASSBUILD1.api-wi.com
+3.57.155.158   TASSBUILD3.api-wi.com
+3.57.155.218   TASSBUILD4.api-wi.com
+3.57.155.4     TMBUILD.api-wi.com
+3.57.155.38    TMBUILD2.api-wi.com
+3.57.155.46    TMBUILD3.api-wi.com
+3.57.155.39    vmcsebuild.api-wi.com
+3.57.155.160   vmdevicebuild.api-wi.com
+3.57.193.71    vmrel008.api-wi.com
+3.57.155.96    vmrmbuild.api-wi.com
+3.57.155.29    VMTASS-K016.api-wi.com
+3.57.155.81    VMTASS-K017.api-wi.com
+3.57.155.82    VMTASS-K018.api-wi.com
+3.57.155.136   VMTASS-K019.api-wi.com
+3.57.155.24    VMTM-K01.api-wi.com
+3.57.155.74    VMTM-K02.api-wi.com
+3.57.155.71    VMTM-K03.api-wi.com
+3.57.155.2     VMTM-K04.api-wi.com
+3.57.155.80    VMTM-K05.api-wi.com
+3.57.155.89    VMTM-K06.api-wi.com
+3.57.155.116   VMTM-K07.api-wi.com
+3.57.155.131   VMTM-K08.api-wi.com
+3.57.155.132   VMTM-K09.api-wi.com
+3.57.155.138   VMTM-K10.api-wi.com
+3.57.155.140   VMTM-K11.api-wi.com
+3.57.155.174   VMTM-K12.api-wi.com
+3.57.155.176   VMTM-K13.api-wi.com
+3.57.155.144   VMTM-K21.api-wi.com
+3.57.155.145   VMTM-K22.api-wi.com
+3.57.155.150   VMTM-K23.api-wi.com
+3.57.155.167   VMTM-M01.api-wi.com
+3.57.155.191   VMTM-M02.api-wi.com
+3.57.155.195   VMTM-M03.api-wi.com
+3.57.155.197   VMTM-M04.api-wi.com
+3.57.155.209   VMTM-M05.api-wi.com
+3.57.155.211   VMTM-M06.api-wi.com
+3.57.155.212   VMTM-M07.api-wi.com
+3.57.155.215   VMTM-M08.api-wi.com
+3.57.155.19    VMTM-M09.api-wi.com
+3.57.155.21    VMTM-M10.api-wi.com
+3.57.155.17    VMTM-M13.api-wi.com
+3.57.155.120   VMTM-M14.api-wi.com
+3.57.155.207   VMTM-REDIS1.api-wi.com
+127.0.0.1      sch-sql01.database.windows.net
+3.57.155.135	VMTM-M15.api-wi.com 
+3.57.155.143	VMTM-M16.api-wi.com
+
+
+127.0.0.1   	wfm-tm-devs201-sql.database.windows.net
+127.0.0.1       wfm-tm-devs001-sql.database.windows.net
+127.0.0.1       wfm-tm-devs101-sql.database.windows.net
+# 127.0.0.1		wfm-tm-intt07-sql.database.windows.net
+# 127.0.0.1		wfm-intt07-sql.database.windows.net
+127.0.0.1		wfm-int-sql.database.windows.net
+
+127.0.0.1       dev-jump03.eastus.cloudapp.azure.com
+127.0.0.1       dev-jump04.eastus.cloudapp.azure.com
+
+
+
+# Kelly's host file entries, 3-21-19
+3.57.155.29	VMTASS-K016.api-wi.com
+3.57.155.81 VMTASS-K017.api-wi.com
+3.57.155.82 VMTASS-K018.api-wi.com
+3.57.155.136 VMTASS-K019.api-wi.com
+3.57.155.24 VMTM-K01.api-wi.com
+3.57.155.74 VMTM-K02.api-wi.com
+3.57.155.71 VMTM-K03.api-wi.com
+3.57.155.2 VMTM-K04.api-wi.com
+3.57.155.80 VMTM-K05.api-wi.com
+3.57.155.89 VMTM-K06.api-wi.com
+3.57.155.116 VMTM-K07.api-wi.com
+3.57.155.131 VMTM-K08.api-wi.com
+3.57.155.132 VMTM-K09.api-wi.com
+3.57.155.138 VMTM-K10.api-wi.com
+3.57.155.140 VMTM-K11.api-wi.com
+3.57.155.174 VMTM-K12.api-wi.com
+3.57.155.176 VMTM-K13.api-wi.com
+3.57.155.144 VMTM-K21.api-wi.com
+3.57.155.145 VMTM-K22.api-wi.com
+3.57.155.150 VMTM-K23.api-wi.com
+3.57.155.167 VMTM-M01.api-wi.com
+3.57.155.191 VMTM-M02.api-wi.com
+3.57.155.195 VMTM-M03.api-wi.com
+3.57.155.197 VMTM-M04.api-wi.com
+3.57.155.209 VMTM-M05.api-wi.com
+3.57.155.211 VMTM-M06.api-wi.com
+3.57.155.207 VMTM-REDIS1.api-wi.com
+3.57.155.146 TASSBUILD1.api-wi.com
+3.57.155.4 TMBUILD.api-wi.com
+3.57.155.38 TMBUILD2.api-wi.com
+3.57.155.77 NPMREPO.api-wi.com
+3.57.155.168 SCBuild1.api-wi.com
+3.57.155.223 wiavmcss-sbapp.api-wi.com
+
+
+
+
+

@@ -1,0 +1,1937 @@
+
+import { ActivityBar } from './activity-bar-view.service';
+//<copyright file="activity-bar-view.service.spec.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import moment, { Moment } from 'moment';
+import { ActivityBarViewService } from "./activity-bar-view.service";
+import { DateFormats } from "../../../shared/date-formats/date-formats";
+import { DateFormatter } from "../../../shared/date-formats/date-formatter";
+import { ActivityBarViewRow } from "./activity-bar-view-row.component";
+
+
+import { TranslateService } from "@ngx-translate/core";
+import { ActivityCoverage } from "../../../time-management-domain/transaction-requests";
+import { ActivityCoverageViewModel } from "./activity-coverage-view-model";
+import { Activity, IActivity } from "../../../time-management-domain/activity";
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+
+
+
+
+
+
+
+describe('ActivityBarViewService', () => {
+  let startDatetime: Moment;
+  let service: ActivityBarViewService;
+
+
+  let timelineStart: Moment = moment('2019-07-10 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+  let postDatetime: Moment = moment('2019-07-11 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+  let dateFormatter: DateFormatter = new DateFormatter(new DateFormats());
+  let mockTranslateService: jasmine.SpyObj<TranslateService>;
+  const activityBarViewService = new ActivityBarViewService(dateFormatter);
+  let component: ActivityBarViewRow;
+
+
+
+  /////////////////
+
+
+  ///////////////////
+
+
+
+
+  beforeEach(() => {
+    dateFormatter = new DateFormatter(new DateFormats());
+    service = new ActivityBarViewService(dateFormatter);
+  });
+
+  describe('#setTimelineConfig', () => {
+    beforeEach(() => {
+      spyOn((<any>service).timelineBehaviorSubject, 'next');
+      startDatetime = moment('2019-07-11 21:00:00', 'YYYY-MM-DD HH:mm:ss');
+      postDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+      service.setTimelineConfig(new ActivityBarViewServiceConfig(startDatetime, postDatetime));
+    });
+
+    it('should notify observers of new timeline', () => {
+      expect(service['timelineBehaviorSubject'].next).toHaveBeenCalledWith(service['timeline']);
+    });
+  });
+
+  describe('#getTimeline', () => {
+    beforeEach(() => {
+      spyOn(service['timelineBehaviorSubject'], 'asObservable');
+      service.getTimeline();
+    });
+
+    it('should return observable for timeline subject', () => {
+      expect(service['timelineBehaviorSubject'].asObservable).toHaveBeenCalled();
+    });
+  });
+
+
+
+  fdescribe('#getBarWidthAndPosition', () => {
+
+    describe('when the bar is contained within the timeline', () => {
+
+      let timelineStartDatetime = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+      let timelinePostDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+      let timelineConfig = new ActivityBarViewServiceConfig(timelineStartDatetime, timelinePostDatetime);
+      let timeline = new ActivityBarViewTimeline(timelineConfig, dateFormatter)
+      let timelineBar: ActivityBar;
+
+
+      beforeEach(() => {
+        let barStart = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+        let barEnd = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+        timelineBar = service.getBarWidthAndPosition(barStart, barEnd, 8, timeline);
+      });
+
+      it('should set bar width and position', () => {
+        // expect(newBar.barWidth).toBe(240);
+        expect(timelineBar.barXPosition).toBe(0);
+      });
+
+      // it('should set activity label', () => {
+      //   expect((<any>component).activityLabel).toBe('09:00-17:00 (8)');
+      // });
+    });
+
+
+
+
+    //////////////////////////////////////////
+
+    describe('when the bar starts before the timeline', () => {
+
+      let timelineStartDatetime = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+      let timelinePostDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+      let timelineConfig = new ActivityBarViewServiceConfig(timelineStartDatetime, timelinePostDatetime);
+      let timeline = new ActivityBarViewTimeline(timelineConfig, dateFormatter)
+      let timelineBar: ActivityBar;
+
+      beforeEach(() => {
+
+        let barStart = moment('2019-07-11 22:00:00', 'YYYY-MM-DD HH:mm:ss');
+        let barEnd = moment('2019-07-12 06:00:00', 'YYYY-MM-DD HH:mm:ss');
+        timelineBar = service.getBarWidthAndPosition(barStart, barEnd, 8, timeline);
+
+        // activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        // component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        // component.activityCoverage = {
+        //   activity: {
+        //     startTime: '20:00:00',
+        //     hours: 8,
+        //     lunchHours: 0,
+        //     payCode: null,
+        //   } as IActivity,
+        //   activityDate: moment('2019-07-10')
+        // } as ActivityCoverageViewModel;
+        // component.ngOnInit();
+
+        // let str = moment('2019-07-11 21:00:00', 'YYYY-MM-DD HH:mm:ss');
+        // let end = moment('2019-07-12 05:00:00', 'YYYY-MM-DD HH:mm:ss');
+
+        // newBar = service.getBarWidthAndPosition(str, end, 8, timelineX);
+
+      });
+
+      it('should set bar position', () => {
+        // expect((<any>component).barPosition).toBe(0);
+        expect(timelineBar.barXPosition).toBe(0);
+      });
+
+      it('should set bar width (cut off on timeline)', () => {
+        expect(timelineBar.barWidth).toBe(210);
+      });
+
+      // it('should set activity label', () => {
+      //   expect((<any>component).activityLabel).toBe('20:00-04:00 (8)');
+      // });
+    });
+
+    describe('when the activity coverage ends after the timeline', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '05:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-12')
+        } as ActivityCoverageViewModel;
+        component.ngOnInit();
+      });
+
+      it('should set bar position to be near end of timeline', () => {
+        expect((<any>component).barPosition).toBe(900);
+      });
+
+      it('should set bar width (cut off on timeline)', () => {
+        expect((<any>component).barWidth).toBe(60);
+      });
+
+      // it('should set activity label', () => {
+      //   expect((<any>component).activityLabel).toBe('05:00-13:00 (8)');
+      // });
+    });
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // describe('#getBarWidthAndPosition', () => {
+  //   beforeEach(() => {
+  //     spyOn(service['timelineBehaviorSubject'], 'asObservable');
+  //     service.getTimeline();
+  //   });
+
+  //   it('should return observable for timeline subject', () => {
+  //     expect(service['timelineBehaviorSubject'].asObservable).toHaveBeenCalled();
+  //   });
+  // });
+
+
+
+
+
+});
+
+
+
+
+
+
+2300 - 0700 - 240
+
+0700 - 1500 - 480 (240)
+
+1500 - 2300 - 720
+
+2300- 0700 - 960
+
+
+
+
+
+
+
+
+
+//<copyright file="activity-bar-view-row.component.spec.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import moment, { Moment } from 'moment';
+import { ActivityBarViewService } from "./activity-bar-view.service";
+import { ActivityBarViewRow } from "./activity-bar-view-row.component";
+import { DateFormatter } from "../../../shared/date-formats/date-formatter";
+import { DateFormats } from "../../../shared/date-formats/date-formats";
+import { TranslateService } from "@ngx-translate/core";
+import { ActivityCoverage } from "../../../time-management-domain/transaction-requests";
+import { ActivityCoverageViewModel } from "./activity-coverage-view-model";
+import { Activity, IActivity } from "../../../time-management-domain/activity";
+
+describe('ActivityBarViewRow', () => {
+  let timelineStart: Moment = moment('2019-07-10 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+  let postDatetime: Moment = moment('2019-07-11 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+  let dateFormatter: DateFormatter = new DateFormatter(new DateFormats());
+  let mockTranslateService: jasmine.SpyObj<TranslateService>;
+  const activityBarViewService = new ActivityBarViewService(dateFormatter);
+  let component: ActivityBarViewRow;
+
+  mockTranslateService = jasmine.createSpyObj('TranslateService', ['instant']);
+  mockTranslateService.instant.and.returnValue('translation');
+
+  describe('#ngOnInit', () => {
+
+    fdescribe('when the activity coverage is shown on the timeline', () => {
+      let activityBarViewServiceSpy: jasmine.Spy;
+
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        
+        component.activityCoverage = {
+          activity: {
+            startTime: '01:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11')
+        } as ActivityCoverageViewModel;
+
+        activityBarViewServiceSpy = spyOn(activityBarViewService, 'getBarWidthAndPosition').and.callThrough();
+        component.ngOnInit();
+      });
+
+      it('should set activity label', () => {
+        expect((<any>component).activityLabel).toBe('01:00-09:00 (8)');
+      });
+
+      it('should call getBarWidthAndPosition and set the bar dimensions', () => {
+        expect(activityBarViewServiceSpy).toHaveBeenCalledTimes(1);
+        expect((<any>component).barWidth).toEqual(240);
+        expect((<any>component).barPosition).toEqual(60);
+      });
+    });
+
+    // describe('when the activity coverage starts before the timeline', () => {
+    //   beforeEach(() => {
+    //     activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+    //     component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+    //     component.activityCoverage = {
+    //       activity: {
+    //         startTime: '20:00:00',
+    //         hours: 8,
+    //         lunchHours: 0,
+    //         payCode: null,
+    //       } as IActivity,
+    //       activityDate: moment('2019-07-10')
+    //     } as ActivityCoverageViewModel;
+    //     component.ngOnInit();
+    //   });
+
+    //   // it('should set bar position', () => {
+    //   //   expect((<any>component).barPosition).toBe(0);
+    //   // });
+
+    //   // it('should set bar width (cut off on timeline)', () => {
+    //   //   expect((<any>component).barWidth).toBe(150);
+    //   // });
+
+    //   it('should set activity label', () => {
+    //     expect((<any>component).activityLabel).toBe('20:00-04:00 (8)');
+    //   });
+    // });
+
+    // describe('when the activity coverage ends the after timeline', () => {
+    //   beforeEach(() => {
+    //     activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+    //     component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+    //     component.activityCoverage = {
+    //       activity: {
+    //         startTime: '05:00:00',
+    //         hours: 8,
+    //         lunchHours: 0,
+    //         payCode: null,
+    //       } as IActivity,
+    //       activityDate: moment('2019-07-12')
+    //     } as ActivityCoverageViewModel;
+    //     component.ngOnInit();
+    //   });
+
+    //   // it('should set bar position to be near end of timeline', () => {
+    //   //   expect((<any>component).barPosition).toBe(900);
+    //   // });
+
+    //   // it('should set bar width (cut off on timeline)', () => {
+    //   //   expect((<any>component).barWidth).toBe(60);
+    //   // });
+
+    //   it('should set activity label', () => {
+    //     expect((<any>component).activityLabel).toBe('05:00-13:00 (8)');
+    //   });
+    // });
+
+    describe('when the activity coverage is overstaffed', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: true,
+          overUnderCount: 50,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = null;
+        component.ngOnInit();
+      });
+
+      it('should set the needLabel to the over staffed value', () => {
+        expect(mockTranslateService.instant).toHaveBeenCalledWith('over', { overCount: 50 });
+        expect((<any>component).needLabel).toBeDefined();
+      });
+    });
+
+    describe('when the activity coverage is understaffed', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isUnderStaffed: true,
+          overUnderCount: -10,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = null;
+        component.ngOnInit();
+      });
+
+      it('should set the needLabel to the under staffed value', () => {
+        expect(mockTranslateService.instant).toHaveBeenCalledWith('need', { needCount: 10 });
+        expect((<any>component).needLabel).toBeDefined();
+      });
+    });
+
+    describe('when the activity coverage is balanced', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: false,
+          isUnderStaffed: false,
+          overUnderCount: 0,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = undefined;
+        component.ngOnInit();
+      });
+
+      it('should not set the needLabel', () => {
+        expect((<any>component).needLabel).toBeUndefined();
+      });
+    });
+  });
+
+  describe('#ngDoCheck', () => {
+
+    describe('when the timeline is not defined', () => {
+      beforeEach(() => {
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: false,
+          isUnderStaffed: false,
+          overUnderCount: 0,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = undefined;
+
+        component.ngDoCheck();
+      });
+
+      it('should not set the needLabel', () => {
+        expect((<any>component).needLabel).toBeUndefined();
+      });
+    });
+
+    describe('when the timeline is defined', () => {
+      beforeEach(() => {
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: true,
+          isUnderStaffed: false,
+          overUnderCount: 1,
+        } as ActivityCoverageViewModel;
+
+        component.ngOnInit(); // this defines timeline
+        (<any>component).needLabel = undefined;
+      });
+
+      describe('when the previous count and current count match', () => {
+        beforeEach(() => {
+          component.activityCoverage.overUnderCount = 1;
+          component.ngDoCheck();
+        });
+
+        it('should not set the needLabel', () => {
+          expect((<any>component).needLabel).toBeUndefined();
+        });
+      });
+
+      describe('when the previous count and current count do not match', () => {
+        beforeEach(() => {
+          component.activityCoverage.overUnderCount = 10;
+          component.ngDoCheck();
+        });
+
+        it('should set the needLabel', () => {
+          expect((<any>component).needLabel).toBeDefined();
+        });
+      });
+    });
+
+  });
+});
+
+
+
+
+
+
+
+///////////////////////////////////////// ActivityBarViewRow COMPONENT	
+
+
+//<copyright file="activity-bar-view-row.component.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { Component, Input, DoCheck, OnDestroy } from '@angular/core';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+import { ActivityCoverageViewModel } from './activity-coverage-view-model';
+import { ActivityBarViewService } from './activity-bar-view.service';
+import moment, { Moment } from 'moment';
+import { TranslateService } from '@ngx-translate/core';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Subscription } from 'rxjs';
+
+@AutoUnsubscribe()
+@Component({
+  selector: 'wf-activity-bar-view-row',
+  templateUrl: './activity-bar-view-row.component.html'
+})
+export class ActivityBarViewRow implements DoCheck, OnDestroy {
+  @Input() activityCoverage: ActivityCoverageViewModel;
+
+  protected barWidth: number;
+  protected barPosition: number;
+  protected activityLabel: string;
+  protected needLabel: string;
+  private activityStart: Moment;
+  private activityEnd: Moment;
+  private previousOverUnderCount: number;
+
+  private timelineSubscription: Subscription; // tslint:disable-line:no-unused-variable
+  public timeline: ActivityBarViewTimeline;
+
+  constructor(
+    public dateFormatter: DateFormatter,
+    public activityBarViewService: ActivityBarViewService,
+    public translateService: TranslateService
+  ) { }
+
+  ngOnInit() {
+    this.timelineSubscription = this.activityBarViewService.getTimeline().subscribe((timeline: ActivityBarViewTimeline) => {
+      /* istanbul ignore else */
+      if (timeline) {
+        this.timeline = timeline;
+
+        let activity = this.activityCoverage.activity;
+        this.activityStart = moment(this.dateFormatter.toShortDate(this.activityCoverage.activityDate) + ' ' + activity.startTime);
+        this.activityEnd = this.activityStart.clone().add(activity.hours, 'hours');
+
+        var activityBar = this.timeline.getBarWidthAndPosition(this.activityStart, this.activityEnd);
+        this.barWidth = activityBar.barWidth;
+        this.barPosition = activityBar.barXPosition;
+
+        this.activityLabel = this.dateFormatter.format(this.activityStart, "HH:mm") + '-' + this.dateFormatter.format(this.activityEnd, "HH:mm") + ' (' + activity.hours + ')';
+        this.generateNeedBarLabel();
+      }
+    });
+  }
+
+  ngDoCheck() {
+    if (this.timeline && this.previousOverUnderCount != this.activityCoverage.overUnderCount) {
+      this.generateNeedBarLabel();
+    }
+  }
+
+  private generateNeedBarLabel() {
+    let activity = this.activityCoverage.activity;
+    this.previousOverUnderCount = this.activityCoverage.overUnderCount;
+
+    if (this.activityCoverage.isUnderStaffed) {
+      this.needLabel = this.translateService.instant('need', { 'needCount': Math.abs(this.activityCoverage.overUnderCount) });
+    } else if (this.activityCoverage.isOverStaffed) {
+      this.needLabel = this.translateService.instant('over', { 'overCount': Math.abs(this.activityCoverage.overUnderCount) });
+    }
+
+    this.activityLabel = this.dateFormatter.to24HourTime(this.activityStart) + '-' + this.dateFormatter.to24HourTime(this.activityEnd) + ' (' + activity.hours + ')';
+  }
+
+  // private getBarWidthAndPosition(barStartDateTime: Moment, barEndDateTime: Moment, barHours: number): ActivityBar {
+  //   let barWidth = barHours * this.timeline.PIXELS_PER_HOUR;
+  //   let barXPosition = this.timeline.xPosition(barStartDateTime);
+
+  //   let barStartsBeforeTimeline = barStartDateTime.isBefore(this.timeline.timelineStartDatetime);
+  //   let barEndsAfterTimeline = barEndDateTime.isAfter(this.timeline.timelineEndDatetime);
+
+  //   if (barStartsBeforeTimeline) {
+  //     barWidth = barWidth - Math.abs(barXPosition);
+  //     barXPosition = 0;
+  //   } else if (barEndsAfterTimeline) {
+  //     barWidth = (this.timeline.timelineWidth) - barXPosition;
+  //   }
+
+  //   return new ActivityBar(barWidth, barXPosition);
+  // }
+
+  /* istanbul ignore next */
+  ngOnDestroy() {
+    // Needs to be present for AutoUnsubscribe
+  }
+
+}
+
+// export class ActivityBar {
+//   constructor(public barWidth: number, public barXPosition: number) { }
+// }
+
+
+
+
+//////////////////////////////////////// activity bar view header
+
+//<copyright file="activity-bar-view-header.component.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+import { ActivityBarViewService } from './activity-bar-view.service';
+import { Subscription } from 'rxjs';
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ICoveragePeriodVariance } from './../../../time-management-domain/coverage-period-variance';
+import moment from 'moment';
+
+@AutoUnsubscribe()
+@Component({
+  selector: 'wf-activity-bar-view-header',
+  templateUrl: './activity-bar-view-header.component.html'
+})
+export class ActivityBarViewHeader implements OnInit, OnDestroy {
+  @Input() coveragePeriodVariances: Array<ICoveragePeriodVariance>;
+  public currentDateName: string;
+  public previousDateName: string;
+  public nextDateName: string;
+  private timelineSubscription: Subscription; // tslint:disable-line:no-unused-variable
+  public timeline: ActivityBarViewTimeline;
+
+  constructor(
+    public dateFormatter: DateFormatter,
+    public activityBarViewService: ActivityBarViewService
+  ) { }
+
+  ngOnInit() {
+    this.timelineSubscription = this.activityBarViewService.getTimeline().subscribe((timeline: ActivityBarViewTimeline) => {
+      /* istanbul ignore else */
+      if (timeline) {
+        this.timeline = timeline;
+        this.currentDateName = this.dateFormatter.format(this.timeline.currentDate, "dddd, MMM D");
+        this.previousDateName = this.dateFormatter.toMonthDay(this.timeline.currentDate.clone().subtract(1, 'days'));
+        this.nextDateName = this.dateFormatter.toMonthDay(this.timeline.currentDate.clone().add(1, 'days'));
+
+        this.coveragePeriodVariances.forEach(coveragPeriodVariance => this.getCoveragePeriodDimensions(coveragPeriodVariance));
+      }
+    });
+  }
+
+  /* istanbul ignore next */
+  ngOnDestroy() {
+    // Needs to be present for AutoUnsubscribe
+  }
+
+  public getCoveragePeriodDimensions(coveragPeriodVariance: any) {
+
+    // const coverageStart = moment(this.dateFormatter.toShortDate(coveragPeriod.coverageDate) + ' ' + coveragPeriod.startTime);
+    const coverageStart = moment(this.dateFormatter.toShortDate(coveragPeriodVariance.activityDate) + ' ' + coveragPeriodVariance.startTime);
+    const coverageEnd = coverageStart.clone().add(coveragPeriodVariance.hours, 'hours');
+
+    let barDimensions = this.timeline.getBarWidthAndPosition(coverageStart, coverageEnd)
+
+    coveragPeriodVariance.startPosition = barDimensions.barXPosition;
+    coveragPeriodVariance.boxWidth = barDimensions.barWidth;
+    coveragPeriodVariance.endPosition = coveragPeriodVariance.startPosition + barDimensions.barWidth;
+
+    // let boxWidth = coveragPeriod.hours * this.timeline.PIXELS_PER_HOUR;
+    // let boxXPosition = this.timeline.xPosition(coverageStart);
+
+    // let coverageStartsBeforeTimeline = coverageStart.isBefore(this.timeline.timelineStartDatetime);
+    // let coverageEndsAfterTimeline = coverageEnd.isAfter(this.timeline.timelineEndDatetime);
+
+    // if (coverageStartsBeforeTimeline) {
+    //   boxWidth = boxWidth - boxXPosition;
+    //   boxXPosition = 0;
+    // } else if (coverageEndsAfterTimeline) {
+    //   boxWidth = (this.timeline.timelineWidth) - boxXPosition;
+    // }
+  }
+}
+
+
+
+
+
+
+
+
+////////////////////////////////////////// activity bar service
+
+
+
+//<copyright file="activity-bar-view.service.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { Injectable } from '@angular/core';
+import { ActivityBarViewServiceConfig } from './activity-bar-view-service-config.model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+
+@Injectable()
+export class ActivityBarViewService {
+
+  private timeline: ActivityBarViewTimeline;
+  private timelineBehaviorSubject: BehaviorSubject<ActivityBarViewTimeline> = new BehaviorSubject<ActivityBarViewTimeline>(this.timeline);
+
+  constructor(private dateFormatter: DateFormatter) { }
+
+  public setTimelineConfig(config: ActivityBarViewServiceConfig) {
+    this.timeline = new ActivityBarViewTimeline(config, this.dateFormatter);
+    this.timelineBehaviorSubject.next(this.timeline);
+  }
+
+  public getTimeline() {
+    return this.timelineBehaviorSubject.asObservable();
+  }
+}
+//   public getBarWidthAndPosition(barStartDateTime: Moment, barEndDateTime: Moment, timeline: ActivityBarViewTimeline): ActivityBar {
+
+//     let barHours = moment.duration(barEndDateTime.diff(barStartDateTime)).asHours();
+
+//     let barWidth = barHours * timeline.PIXELS_PER_HOUR;
+//     let barXPosition = timeline.xPosition(barStartDateTime);
+
+//     let barStartsBeforeTimeline = barStartDateTime.isBefore(timeline.timelineStartDatetime);
+//     let barEndsAfterTimeline = barEndDateTime.isAfter(timeline.timelineEndDatetime);
+
+//     if (barStartsBeforeTimeline) {
+//       barWidth = barWidth - Math.abs(barXPosition);
+//       barXPosition = 0;
+//     } else if (barEndsAfterTimeline) {
+//       barWidth = (timeline.timelineWidth) - barXPosition;
+//     }
+
+//     return new ActivityBar(barWidth, barXPosition);
+//   }
+// }
+
+// export class ActivityBar {
+//   constructor(public barWidth: number, public barXPosition: number) { }
+// }
+
+
+
+
+
+///////////////////////////////// service spec
+
+//<copyright file="activity-bar-view.service.spec.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import { ActivityBarViewService } from "./activity-bar-view.service";
+import { DateFormats } from "../../../shared/date-formats/date-formats";
+import { DateFormatter } from "../../../shared/date-formats/date-formatter";
+import { TranslateService } from "@ngx-translate/core";
+import moment, { Moment } from 'moment';
+
+
+describe('ActivityBarViewService', () => {
+  let service: ActivityBarViewService;
+  let startDatetime: Moment;
+  let postDatetime: Moment;
+  let dateFormatter: DateFormatter = new DateFormatter(new DateFormats());
+  let mockTranslateService: jasmine.SpyObj<TranslateService>;
+
+  beforeEach(() => {
+    dateFormatter = new DateFormatter(new DateFormats());
+    service = new ActivityBarViewService(dateFormatter);
+  });
+
+  describe('#setTimelineConfig', () => {
+    beforeEach(() => {
+      spyOn((<any>service).timelineBehaviorSubject, 'next');
+      startDatetime = moment('2019-07-11 21:00:00', 'YYYY-MM-DD HH:mm:ss');
+      postDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+      service.setTimelineConfig(new ActivityBarViewServiceConfig(startDatetime, postDatetime));
+    });
+
+    it('should notify observers of new timeline', () => {
+      expect(service['timelineBehaviorSubject'].next).toHaveBeenCalledWith(service['timeline']);
+    });
+  });
+
+  describe('#getTimeline', () => {
+    beforeEach(() => {
+      spyOn(service['timelineBehaviorSubject'], 'asObservable');
+      service.getTimeline();
+    });
+
+    it('should return observable for timeline subject', () => {
+      expect(service['timelineBehaviorSubject'].asObservable).toHaveBeenCalled();
+    });
+  });
+
+  // describe('#getBarWidthAndPosition', () => {
+  //   let timelineStartDatetime = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //   let timelinePostDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //   let timelineConfig = new ActivityBarViewServiceConfig(timelineStartDatetime, timelinePostDatetime);
+  //   let timeline = new ActivityBarViewTimeline(timelineConfig, dateFormatter)
+  //   let timelineBar: ActivityBar;
+
+  //   describe('when the bar is contained within the timeline', () => {
+  //     beforeEach(() => {
+  //       let barStart = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //       let barEnd = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //       timelineBar = service.getBarWidthAndPosition(barStart, barEnd, 8, timeline);
+  //     });
+
+  //     it('should set bar width and position', () => {
+  //       expect(timelineBar.barWidth).toBe(240);
+  //       expect(timelineBar.barXPosition).toBe(0);
+  //     });
+  //   });
+
+  //   describe('when the bar starts before the timeline', () => {
+  //     beforeEach(() => {
+  //       let barStart = moment('2019-07-11 22:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //       let barEnd = moment('2019-07-12 06:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //       timelineBar = service.getBarWidthAndPosition(barStart, barEnd, 8, timeline);
+  //     });
+
+  //     it('should set bar position', () => {
+  //       expect(timelineBar.barXPosition).toBe(0);
+  //     });
+
+  //     it('should set bar width (cut off on timeline)', () => {
+  //       expect(timelineBar.barWidth).toBe(210);
+  //     });
+  //   });
+
+  //   describe('when the bar ends after the timeline', () => {
+  //     beforeEach(() => {
+  //       let barStart = moment('2019-07-13 05:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //       let barEnd = moment('2019-07-13 13:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //       timelineBar = service.getBarWidthAndPosition(barStart, barEnd, 8, timeline);
+  //     });
+
+  //     it('should set bar position (near end of timeline)', () => {
+  //       expect(timelineBar.barXPosition).toBe(900);
+  //     });
+
+  //     it('should set bar width (cut off on timeline)', () => {
+  //       expect(timelineBar.barWidth).toBe(60);
+  //     });
+  //   });
+  // });
+});
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////// timeline
+
+
+//<copyright file="activity-bar-view-timeline.model.ts" company="API Healthcare">
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import moment, { Moment } from 'moment';
+import { ActivityBarViewServiceConfig } from './activity-bar-view-service-config.model';
+import { HeaderDatetimeCell } from './header-datetime-cell.model';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+
+export class ActivityBarViewTimeline {
+  public readonly PIXELS_PER_HOUR: number = 30;
+  public readonly MAJOR_TIC_INTERVAL: number = 4;
+
+  constructor(private _config: ActivityBarViewServiceConfig, private dateFormatter: DateFormatter) {
+    this.calculateProperties();
+    this.calculateTimeSpans();
+  }
+
+  private _timelineWidth: number;
+  public get timelineWidth(): number {
+    return this._timelineWidth;
+  }
+
+  private _timelineDuration: moment.Duration;
+  public get timelineDuration(): moment.Duration {
+    return this._timelineDuration;
+  }
+
+  private _timelineStartDatetime: Moment;
+  public get timelineStartDatetime(): Moment {
+    return this._timelineStartDatetime;
+  }
+
+  private _timelineEndDatetime: Moment;
+  public get timelineEndDatetime(): Moment {
+    return this._timelineEndDatetime;
+  }
+
+  private _currentDatetime: Moment;
+  public get currentDate(): Moment {
+    return this._currentDatetime;
+  }
+
+  private _currentDayMidnightPosition: number;
+  public get currentDayMidnightPosition(): number {
+    return this._currentDayMidnightPosition;
+  }
+
+  private _currentDayNoonPosition: number;
+  public get currentDayNoonPosition(): number {
+    return this._currentDayNoonPosition;
+  }
+
+  private _nextDayMidnightPosition: number;
+  public get nextDayMidnightPosition(): number {
+    return this._nextDayMidnightPosition;
+  }
+
+  private _postDatetimePosition: number;
+  public get postDatetimePosition(): number {
+    return this._postDatetimePosition;
+  }
+
+  private _timeSpans: Array<HeaderDatetimeCell>;
+  public get timeSpans(): Array<HeaderDatetimeCell> {
+    return this._timeSpans;
+  }
+
+  private _durationInMinutes: number;
+  public get durationInMinutes(): number {
+    return this._durationInMinutes;
+  }
+
+  public xPosition(datetime: Moment): number {
+    const minutesToDatetime = moment.duration(datetime.diff(this._timelineStartDatetime)).asMinutes();
+    return (minutesToDatetime / this._durationInMinutes) * this._timelineWidth;
+  }
+
+  private calculateProperties() {
+    this._currentDatetime = this._config.postDatetime.clone().startOf("day");
+
+    const hours = moment.duration(this._config.postDatetime.diff(this._config.startDatetime)).asHours();
+    const multipleOfInterval = Math.ceil(hours / this.MAJOR_TIC_INTERVAL) * this.MAJOR_TIC_INTERVAL;
+    this._timelineStartDatetime = this._config.postDatetime.clone().subtract(multipleOfInterval, "hours");
+    this._timelineEndDatetime = this._config.postDatetime.clone().add(1, 'days');
+
+    this._timelineDuration = moment.duration(this._timelineEndDatetime.diff(this._timelineStartDatetime));
+    const timeLineHourTotal = this._timelineDuration.asHours();
+    this._durationInMinutes = this._timelineDuration.asMinutes();
+    this._timelineWidth = timeLineHourTotal * this.PIXELS_PER_HOUR;
+
+    this._currentDayMidnightPosition = this.xPosition(this._currentDatetime);
+    this._currentDayNoonPosition = this.xPosition(this._currentDatetime.clone().add(12, "hours"));
+    this._nextDayMidnightPosition = this.xPosition(this._currentDatetime.clone().add(1, "days"));
+    this._postDatetimePosition = this.xPosition(this._config.postDatetime);
+  }
+
+  private calculateTimeSpans() {
+    let timeSpans: Array<HeaderDatetimeCell> = [];
+    for (var i = 0; i <= this._timelineDuration.asHours(); i++) {
+      const divider = i * this.PIXELS_PER_HOUR;
+      const nextHour = this._timelineStartDatetime.clone().add(i, 'hours');
+      const isMajorTic = i % this.MAJOR_TIC_INTERVAL == 0;
+      const label = isMajorTic ? this.dateFormatter.to24HourTime(nextHour) : this.dateFormatter.format(nextHour, "HH");
+      timeSpans.push(new HeaderDatetimeCell(isMajorTic, divider, label, divider))
+    }
+    this._timeSpans = timeSpans;
+  }
+
+  public getBarWidthAndPosition(barStartDateTime: Moment, barEndDateTime: Moment): ActivityBar {
+    let barHours = moment.duration(barEndDateTime.diff(barStartDateTime)).asHours();
+    let barWidth = barHours * this.PIXELS_PER_HOUR;
+    let barXPosition = this.xPosition(barStartDateTime);
+
+    let barStartsBeforeTimeline = barStartDateTime.isBefore(this.timelineStartDatetime);
+    let barEndsAfterTimeline = barEndDateTime.isAfter(this.timelineEndDatetime);
+
+    if (barStartsBeforeTimeline) {
+      barWidth = barWidth - Math.abs(barXPosition);
+      barXPosition = 0;
+    } else if (barEndsAfterTimeline) {
+      barWidth = (this.timelineWidth) - barXPosition;
+    }
+    return new ActivityBar(barWidth, barXPosition);
+  }
+}
+
+export class ActivityBar {
+  constructor(public barWidth: number, public barXPosition: number) { }
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//<copyright file="activity-bar-view-row.component.ts" company="API Healthcare">
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { Component, Input, DoCheck, OnDestroy } from '@angular/core';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+import { ActivityCoverageViewModel } from './activity-coverage-view-model';
+import { ActivityBarViewService } from './activity-bar-view.service';
+import moment, { Moment } from 'moment';
+import { TranslateService } from '@ngx-translate/core';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Subscription } from 'rxjs';
+
+@AutoUnsubscribe()
+@Component({
+  selector: 'wf-activity-bar-view-row',
+  templateUrl: './activity-bar-view-row.component.html'
+})
+export class ActivityBarViewRow implements DoCheck, OnDestroy {
+  @Input() activityCoverage: ActivityCoverageViewModel;
+
+  protected barWidth: number;
+  protected barPosition: number;
+  protected activityLabel: string;
+  protected needLabel: string;
+  private activityStart: Moment;
+  private activityEnd: Moment;
+  private previousOverUnderCount: number;
+
+  private timelineSubscription: Subscription; // tslint:disable-line:no-unused-variable
+  public timeline: ActivityBarViewTimeline;
+
+  constructor(
+    public dateFormatter: DateFormatter,
+    public activityBarViewService: ActivityBarViewService,
+    public translateService: TranslateService
+  ) { }
+
+  ngOnInit() {
+    this.timelineSubscription = this.activityBarViewService.getTimeline().subscribe((timeline: ActivityBarViewTimeline) => {
+      /* istanbul ignore else */
+      if (timeline) {
+        this.timeline = timeline;
+
+        let activity = this.activityCoverage.activity;
+        this.activityStart = moment(this.dateFormatter.toShortDate(this.activityCoverage.activityDate) + ' ' + activity.startTime);
+        this.activityEnd = this.activityStart.clone().add(activity.hours, 'hours');
+
+        var activityBar = this.timeline.getBarWidthAndPosition(this.activityStart, this.activityEnd);
+        this.barWidth = activityBar.barWidth;
+        this.barPosition = activityBar.barXPosition;
+
+        this.activityLabel = this.dateFormatter.format(this.activityStart, "HH:mm") + '-' + this.dateFormatter.format(this.activityEnd, "HH:mm") + ' (' + activity.hours + ')';
+        this.generateNeedBarLabel();
+      }
+    });
+  }
+
+  ngDoCheck() {
+    if (this.timeline && this.previousOverUnderCount != this.activityCoverage.overUnderCount) {
+      this.generateNeedBarLabel();
+    }
+  }
+
+  private generateNeedBarLabel() {
+    let activity = this.activityCoverage.activity;
+    this.previousOverUnderCount = this.activityCoverage.overUnderCount;
+
+    if (this.activityCoverage.isUnderStaffed) {
+      this.needLabel = this.translateService.instant('need', { 'needCount': Math.abs(this.activityCoverage.overUnderCount) });
+    } else if (this.activityCoverage.isOverStaffed) {
+      this.needLabel = this.translateService.instant('over', { 'overCount': Math.abs(this.activityCoverage.overUnderCount) });
+    }
+    this.activityLabel = this.dateFormatter.to24HourTime(this.activityStart) + '-' + this.dateFormatter.to24HourTime(this.activityEnd) + ' (' + activity.hours + ')';
+  }
+
+  /* istanbul ignore next */
+  ngOnDestroy() {
+    // Needs to be present for AutoUnsubscribe
+  }
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//<copyright file="activity-bar-view-row.component.spec.ts" company="API Healthcare">
+
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import moment, { Moment } from 'moment';
+import { ActivityBarViewService } from "./activity-bar-view.service";
+import { ActivityBarViewRow } from "./activity-bar-view-row.component";
+import { DateFormatter } from "../../../shared/date-formats/date-formatter";
+import { DateFormats } from "../../../shared/date-formats/date-formats";
+import { TranslateService } from "@ngx-translate/core";
+import { ActivityCoverageViewModel } from "./activity-coverage-view-model";
+import { IActivity } from "../../../time-management-domain/activity";
+
+describe('ActivityBarViewRow', () => {
+  let timelineStart: Moment = moment('2019-07-10 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+  let postDatetime: Moment = moment('2019-07-11 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+  let dateFormatter: DateFormatter = new DateFormatter(new DateFormats());
+  let mockTranslateService: jasmine.SpyObj<TranslateService>;
+  const activityBarViewService = new ActivityBarViewService(dateFormatter);
+  let component: ActivityBarViewRow;
+
+  mockTranslateService = jasmine.createSpyObj('TranslateService', ['instant']);
+  mockTranslateService.instant.and.returnValue('translation');
+
+  describe('#ngOnInit', () => {
+
+    describe('when the activity coverage is shown on the timeline', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+
+        component.activityCoverage = {
+          activity: {
+            startTime: '01:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11')
+        } as ActivityCoverageViewModel;
+        component.ngOnInit();
+      });
+
+      it('should set activity label', () => {
+        expect((<any>component).activityLabel).toBe('01:00-09:00 (8)');
+      });
+
+      it('should set the bar dimensions', () => {
+        expect((<any>component).barWidth).toEqual(240);
+        expect((<any>component).barPosition).toEqual(60);
+      });
+    });
+
+    describe('when the activity coverage is overstaffed', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: true,
+          overUnderCount: 50,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = null;
+        component.ngOnInit();
+      });
+
+      it('should set the needLabel to the over staffed value', () => {
+        expect(mockTranslateService.instant).toHaveBeenCalledWith('over', { overCount: 50 });
+        expect((<any>component).needLabel).toBeDefined();
+      });
+    });
+
+    describe('when the activity coverage is understaffed', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isUnderStaffed: true,
+          overUnderCount: -10,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = null;
+        component.ngOnInit();
+      });
+
+      it('should set the needLabel to the under staffed value', () => {
+        expect(mockTranslateService.instant).toHaveBeenCalledWith('need', { needCount: 10 });
+        expect((<any>component).needLabel).toBeDefined();
+      });
+    });
+
+    describe('when the activity coverage is balanced', () => {
+      beforeEach(() => {
+        activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(timelineStart, postDatetime));
+
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: false,
+          isUnderStaffed: false,
+          overUnderCount: 0,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = undefined;
+        component.ngOnInit();
+      });
+
+      it('should not set the needLabel', () => {
+        expect((<any>component).needLabel).toBeUndefined();
+      });
+    });
+  });
+
+  describe('#ngDoCheck', () => {
+
+    describe('when the timeline is not defined', () => {
+      beforeEach(() => {
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: false,
+          isUnderStaffed: false,
+          overUnderCount: 0,
+        } as ActivityCoverageViewModel;
+        (<any>component).needLabel = undefined;
+
+        component.ngDoCheck();
+      });
+
+      it('should not set the needLabel', () => {
+        expect((<any>component).needLabel).toBeUndefined();
+      });
+    });
+
+    describe('when the timeline is defined', () => {
+      beforeEach(() => {
+        component = new ActivityBarViewRow(dateFormatter, activityBarViewService, mockTranslateService);
+        component.activityCoverage = {
+          activity: {
+            startTime: '09:00:00',
+            hours: 8,
+            lunchHours: 0,
+            payCode: null,
+          } as IActivity,
+          activityDate: moment('2019-07-11'),
+          isOverStaffed: true,
+          isUnderStaffed: false,
+          overUnderCount: 1,
+        } as ActivityCoverageViewModel;
+
+        component.ngOnInit(); // this defines timeline
+        (<any>component).needLabel = undefined;
+      });
+
+      describe('when the previous count and current count match', () => {
+        beforeEach(() => {
+          component.activityCoverage.overUnderCount = 1;
+          component.ngDoCheck();
+        });
+
+        it('should not set the needLabel', () => {
+          expect((<any>component).needLabel).toBeUndefined();
+        });
+      });
+
+      describe('when the previous count and current count do not match', () => {
+        beforeEach(() => {
+          component.activityCoverage.overUnderCount = 10;
+          component.ngDoCheck();
+        });
+
+        it('should set the needLabel', () => {
+          expect((<any>component).needLabel).toBeDefined();
+        });
+      });
+    });
+
+  });
+});
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//<copyright file="activity-bar-view-header.component.ts" company="API Healthcare">
+
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+import { ActivityBarViewService } from './activity-bar-view.service';
+import { Subscription } from 'rxjs';
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ICoveragePeriodVariance } from './../../../time-management-domain/coverage-period-variance';
+import moment from 'moment';
+
+@AutoUnsubscribe()
+@Component({
+  selector: 'wf-activity-bar-view-header',
+  templateUrl: './activity-bar-view-header.component.html'
+})
+export class ActivityBarViewHeader implements OnInit, OnDestroy {
+  @Input() coveragePeriodVariances: Array<ICoveragePeriodVariance>;
+  public currentDateName: string;
+  public previousDateName: string;
+  public nextDateName: string;
+  private timelineSubscription: Subscription; // tslint:disable-line:no-unused-variable
+  public timeline: ActivityBarViewTimeline;
+
+  constructor(
+    public dateFormatter: DateFormatter,
+    public activityBarViewService: ActivityBarViewService
+  ) { }
+
+  ngOnInit() {
+    this.timelineSubscription = this.activityBarViewService.getTimeline().subscribe((timeline: ActivityBarViewTimeline) => {
+      /* istanbul ignore else */
+      if (timeline) {
+        this.timeline = timeline;
+        this.currentDateName = this.dateFormatter.format(this.timeline.currentDate, "dddd, MMM D");
+        this.previousDateName = this.dateFormatter.toMonthDay(this.timeline.currentDate.clone().subtract(1, 'days'));
+        this.nextDateName = this.dateFormatter.toMonthDay(this.timeline.currentDate.clone().add(1, 'days'));
+
+        this.coveragePeriodVariances.forEach(coveragPeriodVariance => this.getCoveragePeriodDimensions(coveragPeriodVariance));
+      }
+    });
+  }
+
+  /* istanbul ignore next */
+  ngOnDestroy() {
+    // Needs to be present for AutoUnsubscribe
+  }
+
+  public getCoveragePeriodDimensions(coveragPeriodVariance: any) {
+    const coverageStart = moment(this.dateFormatter.toShortDate(coveragPeriodVariance.activityDate) + ' ' + coveragPeriodVariance.startTime);
+    const coverageEnd = coverageStart.clone().add(coveragPeriodVariance.hours, 'hours');
+    const barDimensions = this.timeline.getBarWidthAndPosition(coverageStart, coverageEnd)
+
+    coveragPeriodVariance.startPosition = barDimensions.barXPosition;
+    coveragPeriodVariance.boxWidth = barDimensions.barWidth;
+    coveragPeriodVariance.endPosition = coveragPeriodVariance.startPosition + barDimensions.barWidth;
+  }
+}
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//<copyright file="activity-bar-view-header.component.spec.ts" company="API Healthcare">
+
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import moment, { Moment } from 'moment';
+import { ActivityBarViewService } from "./activity-bar-view.service";
+import { ActivityBarViewHeader } from "./activity-bar-view-header.component";
+import { DateFormatter } from "../../../shared/date-formats/date-formatter";
+import { DateFormats } from "../../../shared/date-formats/date-formats";
+import { ICoveragePeriodVariance } from "../../../time-management-domain/coverage-period-variance";
+
+describe('ActivityBarViewHeader', () => {
+  let startDatetime: Moment;
+  let postDatetime: Moment;
+  let dateFormatter: DateFormatter;
+  let activityBarViewService: ActivityBarViewService;
+  let component: ActivityBarViewHeader;
+  let coveragePeriodVariance1, coveragePeriodVariance2: ICoveragePeriodVariance;
+  let getDimensionsSpy: jasmine.Spy;
+
+  startDatetime = moment('2019-07-10 21:00:00', 'YYYY-MM-DD HH:mm:ss');
+  postDatetime = moment('2019-07-11 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+  dateFormatter = new DateFormatter(new DateFormats());
+  activityBarViewService = new ActivityBarViewService(dateFormatter);
+  activityBarViewService.setTimelineConfig(new ActivityBarViewServiceConfig(startDatetime, postDatetime));
+  component = new ActivityBarViewHeader(dateFormatter, activityBarViewService);
+
+  coveragePeriodVariance1 = {
+    coverageDate: moment('2019-07-10'),
+    activityDate: moment('2019-07-10'),
+    value: 1,
+    id: 1
+  };
+  coveragePeriodVariance2 = {
+    coverageDate: moment('2019-07-11'),
+    activityDate: moment('2019-07-11'),
+    value: 2,
+    id: 2
+  };
+
+  component.coveragePeriodVariances = [coveragePeriodVariance1, coveragePeriodVariance2];
+
+  describe('#ngOnInit', () => {
+    beforeEach(() => {
+      getDimensionsSpy = spyOn(component, 'getCoveragePeriodDimensions').and.callThrough();
+      component.ngOnInit();
+    });
+
+    it('should set currentDateName', () => {
+      expect(component.currentDateName).toEqual('Thursday, Jul 11');
+    });
+
+    it('should set previousDateName', () => {
+      expect(component.previousDateName).toEqual('Jul 10');
+    });
+
+    it('should set nextDateName', () => {
+      expect(component.nextDateName).toEqual('Jul 12');
+    });
+
+    it('should call getCoveragePeriodDimensions for each coveragePeriodVariance', () => {
+      expect(getDimensionsSpy).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('#getCoveragePeriodDimensions', () => {
+    let timelineStartPosition: number;
+    let calculatedBoxWidth: number;
+    let calculatedBoxEnd: number;
+
+    let coveragePeriod = {
+      hours: 8,
+      startTime: '21:00:00',
+      activityDate: moment('2019-07-10'),
+      startPosition: 999,
+      boxWidth: 999,
+      endPosition: 999
+    }
+
+    beforeEach(() => {
+      timelineStartPosition = component.timeline.xPosition(startDatetime);
+      calculatedBoxWidth = coveragePeriod.hours * component.timeline.PIXELS_PER_HOUR;
+      calculatedBoxEnd = timelineStartPosition + calculatedBoxWidth;
+      component.getCoveragePeriodDimensions(coveragePeriod);
+    });
+
+    it('should set startPosition', () => {
+      expect(coveragePeriod.startPosition).toEqual(timelineStartPosition);
+    });
+
+    it('should set boxWidth', () => {
+      expect(coveragePeriod.boxWidth).toEqual(calculatedBoxWidth);
+    });
+
+    it('should set endPosition', () => {
+      expect(coveragePeriod.endPosition).toEqual(calculatedBoxEnd);
+    });
+  });
+});
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//<copyright file="activity-bar-view.service.ts" company="API Healthcare">
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { Injectable } from '@angular/core';
+import { ActivityBarViewServiceConfig } from './activity-bar-view-service-config.model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ActivityBarViewTimeline } from './activity-bar-view-timeline.model';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+
+@Injectable()
+export class ActivityBarViewService {
+
+  private timeline: ActivityBarViewTimeline;
+  private timelineBehaviorSubject: BehaviorSubject<ActivityBarViewTimeline> = new BehaviorSubject<ActivityBarViewTimeline>(this.timeline);
+
+  constructor(private dateFormatter: DateFormatter) { }
+
+  public setTimelineConfig(config: ActivityBarViewServiceConfig) {
+    this.timeline = new ActivityBarViewTimeline(config, this.dateFormatter);
+    this.timelineBehaviorSubject.next(this.timeline);
+  }
+
+  public getTimeline() {
+    return this.timelineBehaviorSubject.asObservable();
+  }
+}
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//<copyright file="activity-bar-view.service.spec.ts" company="API Healthcare">
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import { ActivityBarViewService } from "./activity-bar-view.service";
+import { DateFormats } from "../../../shared/date-formats/date-formats";
+import { DateFormatter } from "../../../shared/date-formats/date-formatter";
+import moment, { Moment } from 'moment';
+
+describe('ActivityBarViewService', () => {
+  let service: ActivityBarViewService;
+  let startDatetime: Moment;
+  let postDatetime: Moment;
+  let dateFormatter: DateFormatter = new DateFormatter(new DateFormats());
+
+  beforeEach(() => {
+    dateFormatter = new DateFormatter(new DateFormats());
+    service = new ActivityBarViewService(dateFormatter);
+  });
+
+  describe('#setTimelineConfig', () => {
+    beforeEach(() => {
+      spyOn((<any>service).timelineBehaviorSubject, 'next');
+      startDatetime = moment('2019-07-11 21:00:00', 'YYYY-MM-DD HH:mm:ss');
+      postDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+      service.setTimelineConfig(new ActivityBarViewServiceConfig(startDatetime, postDatetime));
+    });
+
+    it('should notify observers of new timeline', () => {
+      expect(service['timelineBehaviorSubject'].next).toHaveBeenCalledWith(service['timeline']);
+    });
+  });
+
+  describe('#getTimeline', () => {
+    beforeEach(() => {
+      spyOn(service['timelineBehaviorSubject'], 'asObservable');
+      service.getTimeline();
+    });
+
+    it('should return observable for timeline subject', () => {
+      expect(service['timelineBehaviorSubject'].asObservable).toHaveBeenCalled();
+    });
+  });
+});
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//<copyright file="activity-bar-view-timeline.model.ts" company="API Healthcare">
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import moment, { Moment } from 'moment';
+import { ActivityBarViewServiceConfig } from './activity-bar-view-service-config.model';
+import { HeaderDatetimeCell } from './header-datetime-cell.model';
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+
+export class ActivityBarViewTimeline {
+  public readonly PIXELS_PER_HOUR: number = 30;
+  public readonly MAJOR_TIC_INTERVAL: number = 4;
+
+  constructor(private _config: ActivityBarViewServiceConfig, private dateFormatter: DateFormatter) {
+    this.calculateProperties();
+    this.calculateTimeSpans();
+  }
+
+  private _timelineWidth: number;
+  public get timelineWidth(): number {
+    return this._timelineWidth;
+  }
+
+  private _timelineDuration: moment.Duration;
+  public get timelineDuration(): moment.Duration {
+    return this._timelineDuration;
+  }
+
+  private _timelineStartDatetime: Moment;
+  public get timelineStartDatetime(): Moment {
+    return this._timelineStartDatetime;
+  }
+
+  private _timelineEndDatetime: Moment;
+  public get timelineEndDatetime(): Moment {
+    return this._timelineEndDatetime;
+  }
+
+  private _currentDatetime: Moment;
+  public get currentDate(): Moment {
+    return this._currentDatetime;
+  }
+
+  private _currentDayMidnightPosition: number;
+  public get currentDayMidnightPosition(): number {
+    return this._currentDayMidnightPosition;
+  }
+
+  private _currentDayNoonPosition: number;
+  public get currentDayNoonPosition(): number {
+    return this._currentDayNoonPosition;
+  }
+
+  private _nextDayMidnightPosition: number;
+  public get nextDayMidnightPosition(): number {
+    return this._nextDayMidnightPosition;
+  }
+
+  private _postDatetimePosition: number;
+  public get postDatetimePosition(): number {
+    return this._postDatetimePosition;
+  }
+
+  private _timeSpans: Array<HeaderDatetimeCell>;
+  public get timeSpans(): Array<HeaderDatetimeCell> {
+    return this._timeSpans;
+  }
+
+  private _durationInMinutes: number;
+  public get durationInMinutes(): number {
+    return this._durationInMinutes;
+  }
+
+  public xPosition(datetime: Moment): number {
+    const minutesToDatetime = moment.duration(datetime.diff(this._timelineStartDatetime)).asMinutes();
+    return (minutesToDatetime / this._durationInMinutes) * this._timelineWidth;
+  }
+
+  private calculateProperties() {
+    this._currentDatetime = this._config.postDatetime.clone().startOf("day");
+
+    const hours = moment.duration(this._config.postDatetime.diff(this._config.startDatetime)).asHours();
+    const multipleOfInterval = Math.ceil(hours / this.MAJOR_TIC_INTERVAL) * this.MAJOR_TIC_INTERVAL;
+    this._timelineStartDatetime = this._config.postDatetime.clone().subtract(multipleOfInterval, "hours");
+    this._timelineEndDatetime = this._config.postDatetime.clone().add(1, 'days');
+
+    this._timelineDuration = moment.duration(this._timelineEndDatetime.diff(this._timelineStartDatetime));
+    const timeLineHourTotal = this._timelineDuration.asHours();
+    this._durationInMinutes = this._timelineDuration.asMinutes();
+    this._timelineWidth = timeLineHourTotal * this.PIXELS_PER_HOUR;
+
+    this._currentDayMidnightPosition = this.xPosition(this._currentDatetime);
+    this._currentDayNoonPosition = this.xPosition(this._currentDatetime.clone().add(12, "hours"));
+    this._nextDayMidnightPosition = this.xPosition(this._currentDatetime.clone().add(1, "days"));
+    this._postDatetimePosition = this.xPosition(this._config.postDatetime);
+  }
+
+  private calculateTimeSpans() {
+    let timeSpans: Array<HeaderDatetimeCell> = [];
+    for (var i = 0; i <= this._timelineDuration.asHours(); i++) {
+      const divider = i * this.PIXELS_PER_HOUR;
+      const nextHour = this._timelineStartDatetime.clone().add(i, 'hours');
+      const isMajorTic = i % this.MAJOR_TIC_INTERVAL == 0;
+      const label = this.dateFormatter.to24HourTime(nextHour);
+      timeSpans.push(new HeaderDatetimeCell(isMajorTic, divider, label, divider));
+    }
+    this._timeSpans = timeSpans;
+  }
+
+  public getBarWidthAndPosition(barStartDateTime: Moment, barEndDateTime: Moment): ActivityBar {
+    let barHours = moment.duration(barEndDateTime.diff(barStartDateTime)).asHours();
+    let barWidth = barHours * this.PIXELS_PER_HOUR;
+    let barXPosition = this.xPosition(barStartDateTime);
+
+    let barStartsBeforeTimeline = barStartDateTime.isBefore(this.timelineStartDatetime);
+    let barEndsAfterTimeline = barEndDateTime.isAfter(this.timelineEndDatetime);
+
+    if (barStartsBeforeTimeline) {
+      barWidth = barWidth - Math.abs(barXPosition);
+      barXPosition = 0;
+    } else if (barEndsAfterTimeline) {
+      barWidth = (this.timelineWidth) - barXPosition;
+    }
+    return new ActivityBar(barWidth, barXPosition);
+  }
+}
+
+export class ActivityBar {
+  constructor(public barWidth: number, public barXPosition: number) { }
+}
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//<copyright file="activity-bar-view-timeline.model.spec.ts" company="API Healthcare">
+
+
+
+// Copyright © 2019 API Healthcare.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { ActivityBarViewServiceConfig } from "./activity-bar-view-service-config.model";
+import moment, { Moment } from 'moment';
+import { ActivityBarViewTimeline, ActivityBar } from "./activity-bar-view-timeline.model";
+import { DateFormatter } from '../../../shared/date-formats/date-formatter';
+import { DateFormats } from '../../../shared/date-formats/date-formats';
+
+describe('ActivityBarViewTimeline', () => {
+  let startDatetime: Moment;
+  let postDatetime: Moment;
+  let activityBarViewTimeline: ActivityBarViewTimeline;
+  let dateFormatter: DateFormatter = new DateFormatter(new DateFormats());
+
+  beforeEach(() => {
+    startDatetime = moment('2019-07-11 21:00:00', 'YYYY-MM-DD HH:mm:ss');
+    postDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+
+    activityBarViewTimeline = new ActivityBarViewTimeline(new ActivityBarViewServiceConfig(startDatetime, postDatetime), dateFormatter);
+  });
+
+  it('should set currentDate to postDatetime start of day', () => {
+    expect(activityBarViewTimeline.currentDate.isSame(moment('2019-07-12 00:00:00', 'YYYY-MM-DD HH:mm:ss'))).toEqual(true);
+  });
+
+  it('should set timelineStartDatetime to a an earlier time that is a multiple of the interval subtracted from the postDatetime', () => {
+    expect(activityBarViewTimeline.timelineStartDatetime.isSame(moment('2019-07-11 19:00:00', 'YYYY-MM-DD HH:mm:ss'))).toEqual(true);
+  });
+
+  it('should set timelineDuration to the diff of timelineEndDatetime and timelineStartDatetime', () => {
+    const duration = moment.duration(activityBarViewTimeline.timelineEndDatetime.diff(activityBarViewTimeline.timelineStartDatetime));
+    expect(activityBarViewTimeline.timelineDuration).toEqual(duration);
+  });
+
+  it('should set timelineWidth equal to time line hours * PIXELS_PER_HOUR', () => {
+    const width = activityBarViewTimeline.timelineDuration.asHours() * activityBarViewTimeline.PIXELS_PER_HOUR;
+    expect(activityBarViewTimeline.timelineWidth).toEqual(width);
+  });
+
+  it('should set currentDayMidnightPosition to the relative location of the time in the timeline.', () => {
+    const minutesToCurrentDayMidnight = moment.duration(activityBarViewTimeline.currentDate.diff(activityBarViewTimeline.timelineStartDatetime)).asMinutes();
+    const position = (minutesToCurrentDayMidnight / activityBarViewTimeline.timelineDuration.asMinutes()) * activityBarViewTimeline.timelineWidth;
+    expect(activityBarViewTimeline.currentDayMidnightPosition).toEqual(position);
+  });
+
+  it('should set currentDayNoonPosition to the relative location of the time in the timeline.', () => {
+    const minutesToCurrentDayNoon = moment.duration(activityBarViewTimeline.currentDate.clone().add(12, "hours").diff(activityBarViewTimeline.timelineStartDatetime)).asMinutes();
+    const position = (minutesToCurrentDayNoon / activityBarViewTimeline.timelineDuration.asMinutes()) * activityBarViewTimeline.timelineWidth;
+    expect(activityBarViewTimeline.currentDayNoonPosition).toEqual(position);
+  });
+
+  it('should set nextDayMidnightPosition to the relative location of the time in the timeline.', () => {
+    const minutesToNextDayMidnight = moment.duration(activityBarViewTimeline.currentDate.clone().add(1, "days").diff(activityBarViewTimeline.timelineStartDatetime)).asMinutes();
+    const position = (minutesToNextDayMidnight / activityBarViewTimeline.timelineDuration.asMinutes()) * activityBarViewTimeline.timelineWidth;
+    expect(activityBarViewTimeline.nextDayMidnightPosition).toEqual(position);
+  });
+
+  it('should set postDatetimePosition to the relative location of the time in the timeline.', () => {
+    const minutesToPostDatetime = moment.duration(postDatetime.diff(activityBarViewTimeline.timelineStartDatetime)).asMinutes();
+    const position = (minutesToPostDatetime / activityBarViewTimeline.timelineDuration.asMinutes()) * activityBarViewTimeline.timelineWidth;
+    expect(activityBarViewTimeline.postDatetimePosition).toEqual(position);
+  });
+
+  describe('#getBarWidthAndPosition', () => {
+    let timelineStartDatetime = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+    let timelinePostDatetime = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+    let timelineConfig = new ActivityBarViewServiceConfig(timelineStartDatetime, timelinePostDatetime);
+    let timeline = new ActivityBarViewTimeline(timelineConfig, dateFormatter)
+    let timelineBar: ActivityBar;
+
+    describe('when the bar is contained within the timeline', () => {
+      beforeEach(() => {
+        let barStart = moment('2019-07-11 23:00:00', 'YYYY-MM-DD HH:mm:ss');
+        let barEnd = moment('2019-07-12 07:00:00', 'YYYY-MM-DD HH:mm:ss');
+        timelineBar = timeline.getBarWidthAndPosition(barStart, barEnd);
+      });
+
+      it('should set bar width and position', () => {
+        expect(timelineBar.barWidth).toBe(240);
+        expect(timelineBar.barXPosition).toBe(0);
+      });
+    });
+
+    describe('when the bar starts before the timeline', () => {
+      beforeEach(() => {
+        let barStart = moment('2019-07-11 22:00:00', 'YYYY-MM-DD HH:mm:ss');
+        let barEnd = moment('2019-07-12 06:00:00', 'YYYY-MM-DD HH:mm:ss');
+        timelineBar = timeline.getBarWidthAndPosition(barStart, barEnd);
+      });
+
+      it('should set bar position', () => {
+        expect(timelineBar.barXPosition).toBe(0);
+      });
+
+      it('should set bar width (cut off on timeline)', () => {
+        expect(timelineBar.barWidth).toBe(210);
+      });
+    });
+
+    describe('when the bar ends after the timeline', () => {
+      beforeEach(() => {
+        let barStart = moment('2019-07-13 05:00:00', 'YYYY-MM-DD HH:mm:ss');
+        let barEnd = moment('2019-07-13 13:00:00', 'YYYY-MM-DD HH:mm:ss');
+        timelineBar = timeline.getBarWidthAndPosition(barStart, barEnd);
+      });
+
+      it('should set bar position (near end of timeline)', () => {
+        expect(timelineBar.barXPosition).toBe(900);
+      });
+
+      it('should set bar width (cut off on timeline)', () => {
+        expect(timelineBar.barWidth).toBe(60);
+      });
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // const label = isMajorTic ? this.dateFormatter.to24HourTime(nextHour) : this.dateFormatter.format(nextHour, "HH");
+

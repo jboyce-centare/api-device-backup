@@ -1,0 +1,190 @@
+
+
+
+every activity that counts towards coverage
+
+activitites that cross over midnight
+
+
+activity code
+
+target
+	target equals filled plus open
+	
+filled 
+
+open
+
+
+
+
+
+
+
+f before first describe 
+
+npm run coverage
+
+bookmarkjasmine docs
+
+
+
+    private events: Events
+
+import { AlertButton, AlertController, Events, ModalController } from 'ionic-angular';
+import { ToastEvents } from '../../../shared/toast/models/wfm-toast-events';
+import { ToastOptions } from '../../../shared/toast/models/wfm-toast-options.model';
+import { MessageSeverity } from '../../../shared/toast/models/wfm-message-severity';
+
+
+
+ // console.log(adjustedCoverages);
+    this.events.publish(ToastEvents.SHOW_DISMISSIBLE_TOAST, new ToastOptions(MessageSeverity.SUCCESS, 'success', 'staffing-coverage-drawer.success-banner-message'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*     if (this.config && this.config.selectedDate && activityCoverage.coreStaffingPlan) {
+      isEditable = this.config.selectedDate.startOf('day')
+        .diff(activityCoverage.activityDate.startOf('day')) == 0 && !activityCoverage.coreStaffingPlan.isReadOnly ? true : false;
+    }
+    else if (this.config && this.config.selectedDate) {
+      isEditable = this.config.selectedDate.startOf('day').diff(activityCoverage.activityDate.startOf('day')) == 0 ? true : false;
+    } */
+
+
+  /* 
+        let calculatedScheduledCount = activityCoverage.coreStaffingPlan ? (activityCoverage.scheduledCount - activityCoverage.coreStaffingPlan.target) : activityCoverage.scheduledCount;
+    
+        let isOverStaffed = calculatedScheduledCount > 0;
+        let isUnderStaffed = calculatedScheduledCount < 0;
+    
+        let target = activityCoverage.coreStaffingPlan ? activityCoverage.coreStaffingPlan.target : 0;
+        let open = activityCoverage.coreStaffingPlan ? (activityCoverage.scheduledCount - activityCoverage.coreStaffingPlan.target) : activityCoverage.scheduledCount; */
+
+    /*     let coverageCounts = this.getOverUnderTarget(activityCoverage, activityCoverage.coreStaffingPlan.target);
+    
+        let calculatedScheduledCount =  coverageCounts.calculatedScheduledCount;
+        let isOverStaffed = coverageCounts.isOverStaffed;
+        let isUnderStaffed = coverageCounts.isUnderStaffed ;
+        let target = coverageCounts.target;
+        let open = coverageCounts.open; */
+
+
+
+
+
+
+
+
+
+  // public getOverUnderTarget(coverage, target?) {
+
+  //   let newtarget;
+  //   if (target) {
+  //     newtarget = coverage.coreStaffingPlan ? coverage.coreStaffingPlan.target : 0;
+
+  //   }
+  //   else {
+  //     newtarget = coverage.target
+  //   }
+
+
+  //   // if (coverage.target === null) {
+  //   //   coverage.target = 0;
+  //   // }
+
+  //   let calculatedScheduledCount = coverage.coreStaffingPlan ? (coverage.scheduledCount - coverage.target) : coverage.scheduledCount;
+  //   coverage.isOverStaffed = calculatedScheduledCount > 0;
+  //   coverage.isUnderStaffed = calculatedScheduledCount < 0;
+  //   coverage.open = coverage.scheduledCount - coverage.target;
+
+  //   return
+  // }
+
+
+
+  // public updateOpen(coverage) {
+
+  //   if (coverage.target === null) {
+  //     coverage.target = 0;
+  //   }
+
+  //   let calculatedScheduledCount = coverage.coreStaffingPlan ? (coverage.scheduledCount - coverage.target) : coverage.scheduledCount;
+
+  //   coverage.isOverStaffed = calculatedScheduledCount > 0;
+  //   coverage.isUnderStaffed = calculatedScheduledCount < 0;
+
+  //   coverage.open = coverage.scheduledCount - coverage.target;
+  // }
+  
+  
+  
+  
+//|| event.which == 32
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
