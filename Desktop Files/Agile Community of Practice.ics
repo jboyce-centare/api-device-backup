@@ -1,0 +1,268 @@
+BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 16.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:REQUEST
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:Central Standard Time
+BEGIN:STANDARD
+DTSTART:16011104T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=11
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0600
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010311T020000
+RRULE:FREQ=YEARLY;BYDAY=2SU;BYMONTH=3
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0500
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;CN="@HEALTH WFM All Innovation";RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="@HEALTH WFM Contractors";RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Gutmanis, Chris (Virence Health non-GE)";RSVP=TRUE:invalid:nom
+	ail
+ATTENDEE;CN="Tock, Roy (Virence Health non-GE)";RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Wied, Andrew (Virence Health non-GE)";RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="~HEALTH Hartford Mountain - 10";CUTYPE=RESOURCE;ROLE=NON-PARTI
+	CIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Kukurba, Michael (Virence Health non-GE)";ROLE=OPT-PARTICIPANT
+	;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Vankayala, Srikanth (Sri) (Virence Health non-GE)";ROLE=OPT-PA
+	RTICIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Young, Harvey H (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;
+	RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Tibbe, Gregory (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Payne, Damon (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RSV
+	P=TRUE:invalid:nomail
+ATTENDEE;CN="Soldner, Joshua D (Virence Health non-GE)";ROLE=OPT-PARTICIPAN
+	T;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Wuest, Brian Alan (Virence Health non-GE)";ROLE=OPT-PARTICIPAN
+	T;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Traum, Kyle Raymond (Virence Health non-GE)";ROLE=OPT-PARTICIP
+	ANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Evans, Steven Christopher (Virence Health non-GE)";ROLE=OPT-PA
+	RTICIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Kendl, Brian (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RSV
+	P=TRUE:invalid:nomail
+ATTENDEE;CN="Peterson, Jeffrey H (Virence Health non-GE)";ROLE=OPT-PARTICIP
+	ANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Kapoor, Preeti (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Livesay, Daniel (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;
+	RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Nelson, Christopher R (Virence Health non-GE)";ROLE=OPT-PARTIC
+	IPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Schneider, Joshua (Virence Health non-GE)";ROLE=OPT-PARTICIPAN
+	T;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Salam, Shafeek (GE Healthcare)";ROLE=OPT-PARTICIPANT;RSVP=TRUE
+	:invalid:nomail
+ATTENDEE;CN="Reddyvari Lakshmannagari, Santhosh (GE Healthcare)";ROLE=OPT-P
+	ARTICIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Engelman, Daniel D (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Pokorny, Jodee (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Lemke, Brian W (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Mitchell, Michelle (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="BISWAS, SANDEEP (GE Healthcare)";ROLE=OPT-PARTICIPANT;RSVP=TRU
+	E:invalid:nomail
+ATTENDEE;CN="Gibeaut, Curtis (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;
+	RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Beall, Ryan (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RSVP
+	=TRUE:invalid:nomail
+ATTENDEE;CN="Cookson, Shawn Richard (Virence Health non-GE)";ROLE=OPT-PARTI
+	CIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Parikh, Harsh (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RS
+	VP=TRUE:invalid:nomail
+ATTENDEE;CN="Steenbekkers, Jorrit S (Virence Health non-GE)";ROLE=OPT-PARTI
+	CIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Cronin, Jared Colt (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Brakob, Stacy A (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;
+	RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Knoske, Rick J (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Lemke, Dale M (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RS
+	VP=TRUE:invalid:nomail
+ATTENDEE;CN="Haag, Christopher L (Virence Health non-GE)";ROLE=OPT-PARTICIP
+	ANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="MINORMUTHU, SELVAKUMAR (Virence Health non-GE)";ROLE=OPT-PARTI
+	CIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Baska, Deepa (GE Healthcare)";ROLE=OPT-PARTICIPANT;RSVP=TRUE:i
+	nvalid:nomail
+ATTENDEE;CN="Garvey, Nathan L (Virence Health non-GE)";ROLE=OPT-PARTICIPANT
+	;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Robinson, Richard Dale (Virence Health non-GE)";ROLE=OPT-PARTI
+	CIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Pemberton, James (Virence Health non-GE)";ROLE=OPT-PARTICIPANT
+	;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Case, John Matthew (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Berling, Melony (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;
+	RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Boisits, Kevin (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Guyant, Lori (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RSV
+	P=TRUE:invalid:nomail
+ATTENDEE;CN="Timmerman, Glenn M (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Fleischmann, Dean C (Virence Health non-GE)";ROLE=OPT-PARTICIP
+	ANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Buichl , Joseph Charles III (Virence Health non-GE)";ROLE=OPT-
+	PARTICIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Stahl, Christopher (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Durow, Lee Douglas (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Rottmann, James M (Virence Health non-GE)";ROLE=OPT-PARTICIPAN
+	T;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Kelly, Bryan C (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Boltz, Suzette R (Virence Health non-GE)";ROLE=OPT-PARTICIPANT
+	;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Littlefield, Gabriel A (Virence Health non-GE)";ROLE=OPT-PARTI
+	CIPANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Wolman, Jamie (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RS
+	VP=TRUE:invalid:nomail
+ATTENDEE;CN="Hutchison, Paul R (Virence Health non-GE)";ROLE=OPT-PARTICIPAN
+	T;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Laatsch, Adam James (Virence Health non-GE)";ROLE=OPT-PARTICIP
+	ANT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Batzner, Jack Adam (Virence Health non-GE)";ROLE=OPT-PARTICIPA
+	NT;RSVP=TRUE:invalid:nomail
+ATTENDEE;CN="Williams, Sara (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;R
+	SVP=TRUE:invalid:nomail
+ATTENDEE;CN="Athorp, Todd (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RSV
+	P=TRUE:invalid:nomail
+ATTENDEE;CN="KC, Rijil (Virence Health non-GE)";ROLE=OPT-PARTICIPANT;RSVP=T
+	RUE:invalid:nomail
+ATTENDEE;CN="La Riva, Joseph Anthony (Virence Health non-GE)";ROLE=OPT-PART
+	ICIPANT;RSVP=TRUE:invalid:nomail
+CLASS:PUBLIC
+CREATED:20190523T191520Z
+DESCRIPTION: \n\nJoin the flow on Flowdock! https://www.flowdock.com/app/ge
+	-developer-cloud/agile-cop\n\nAdd topics to discuss or success stories to 
+	share! https://devcloud.swcoe.ge.com/devspace/display/UZKQV/Agile+Communit
+	y+of+Practice\n\n \n\nWhat: A meeting to discuss API’s Agile practices. 
+	What's working? What's not working? How can we improve as individuals\, te
+	ams\, and an organization?\n\nWhy: We want to break down barriers and info
+	rmation silos. Agile practices should make us better and make work easier.
+	 Let’s share successful practices and grow together.\n\nWho: Anybody who
+	 helps API succeed. This is an open Community that welcomes everyone no ma
+	tter what role or what product they work with.\n\n \n\n\n\n \n\n..........
+	..........................................................................
+	.....................................................\n\n \n\n--> Join Sky
+	pe Meeting <https://meet.lync.com/gecompany/briankendl/9HY3SNDK>       \n\
+	nTrouble Joining? Try Skype Web App <https://meet.lync.com/gecompany/kelly
+	.ocallaghan/0CCGV74H?sl=1>  \n\nToll-free Number: +1 (866) 799-9419\n\nAcc
+	ess Code: 55839877#\n\nFind a local number <https://dialin.lync.com/3b1b58
+	9b-832c-4e00-bdff-8d1ce50e34e7?id=25058452>  \n\n \n\n \n\n \n\n
+DTEND;TZID="Central Standard Time":20190528T110000
+DTSTAMP:20190520T155630Z
+DTSTART;TZID="Central Standard Time":20190528T100000
+LAST-MODIFIED:20190523T191520Z
+LOCATION:Skype Meeting | Hartford - Mountain | Brookfield - Discovery World
+ORGANIZER;CN="Boyce, Josh (Virence Health non-GE)":invalid:nomail
+PRIORITY:5
+SEQUENCE:0
+SUMMARY;LANGUAGE=en-us:Agile Community of Practice
+TRANSP:OPAQUE
+UID:040000008200E00074C5B7101A82E0080000000020B248D3F90ED501000000000000000
+	01000000023AD7B49B53E024588FB5FCBD9D1D236
+X-ALT-DESC;FMTTYPE=text/html:<html xmlns:v="urn:schemas-microsoft-com:vml" 
+	xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-mic
+	rosoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/
+	12/omml" xmlns="http://www.w3.org/TR/REC-html40"><head><meta name=Generato
+	r content="Microsoft Word 15 (filtered medium)"><!--[if !mso]><style>v\\:*
+	 {behavior:url(#default#VML)\;}\no\\:* {behavior:url(#default#VML)\;}\nw\\
+	:* {behavior:url(#default#VML)\;}\n.shape {behavior:url(#default#VML)\;}\n
+	</style><![endif]--><style><!--\n/* Font Definitions */\n@font-face\n	{fon
+	t-family:Wingdings\;\n	panose-1:5 0 0 0 0 0 0 0 0 0\;}\n@font-face\n	{font
+	-family:"Cambria Math"\;\n	panose-1:2 4 5 3 5 4 6 3 2 4\;}\n@font-face\n	{
+	font-family:Calibri\;\n	panose-1:2 15 5 2 2 2 4 3 2 4\;}\n/* Style Definit
+	ions */\np.MsoNormal\, li.MsoNormal\, div.MsoNormal\n	{margin:0in\;\n	marg
+	in-bottom:.0001pt\;\n	font-size:11.0pt\;\n	font-family:"Calibri"\,sans-ser
+	if\;}\na:link\, span.MsoHyperlink\n	{mso-style-priority:99\;\n	color:#0563
+	C1\;\n	text-decoration:underline\;}\na:visited\, span.MsoHyperlinkFollowed
+	\n	{mso-style-priority:99\;\n	color:#954F72\;\n	text-decoration:underline\
+	;}\np.MsoPlainText\, li.MsoPlainText\, div.MsoPlainText\n	{mso-style-prior
+	ity:99\;\n	mso-style-link:"Plain Text Char"\;\n	margin:0in\;\n	margin-bott
+	om:.0001pt\;\n	font-size:11.0pt\;\n	font-family:"Calibri"\,sans-serif\;}\n
+	span.EmailStyle17\n	{mso-style-type:personal-compose\;\n	font-family:"Cali
+	bri"\,sans-serif\;\n	color:windowtext\;}\nspan.PlainTextChar\n	{mso-style-
+	name:"Plain Text Char"\;\n	mso-style-priority:99\;\n	mso-style-link:"Plain
+	 Text"\;\n	font-family:"Calibri"\,sans-serif\;}\nspan.EmailStyle20\n	{mso-
+	style-type:personal\;\n	font-family:"Calibri"\,sans-serif\;\n	color:window
+	text\;}\n.MsoChpDefault\n	{mso-style-type:export-only\;\n	font-family:"Cal
+	ibri"\,sans-serif\;}\n@page WordSection1\n	{size:8.5in 11.0in\;\n	margin:1
+	.0in 1.0in 1.0in 1.0in\;}\ndiv.WordSection1\n	{page:WordSection1\;}\n--></
+	style><!--[if gte mso 9]><xml>\n<o:shapedefaults v:ext="edit" spidmax="102
+	6" />\n</xml><![endif]--><!--[if gte mso 9]><xml>\n<o:shapelayout v:ext="e
+	dit">\n<o:idmap v:ext="edit" data="1" />\n</o:shapelayout></xml><![endif]-
+	-></head><body lang=EN-US link="#0563C1" vlink="#954F72"><div class=WordSe
+	ction1><p class=MsoNormal><span style='font-size:8.0pt'><o:p>&nbsp\;</o:p>
+	</span></p><p class=MsoNormal style='line-height:200%'>Join the flow on Fl
+	owdock! <a href="https://www.flowdock.com/app/ge-developer-cloud/agile-cop
+	">https://www.flowdock.com/app/ge-developer-cloud/agile-cop</a><o:p></o:p>
+	</p><p class=MsoNormal style='line-height:200%'>Add topics to discuss or s
+	uccess stories to share! <a href="https://devcloud.swcoe.ge.com/devspace/d
+	isplay/UZKQV/Agile+Community+of+Practice">https://devcloud.swcoe.ge.com/de
+	vspace/display/UZKQV/Agile+Community+of+Practice</a><o:p></o:p></p><p clas
+	s=MsoNormal style='line-height:150%'><o:p>&nbsp\;</o:p></p><p class=MsoNor
+	mal style='line-height:150%'><b>What:</b> A meeting to discuss API&#8217\;
+	s Agile practices. What's working? What's not working? How can we improve 
+	as individuals\, teams\, and an organization?<o:p></o:p></p><p class=MsoNo
+	rmal style='line-height:150%'><b>Why:</b> We want to break down barriers a
+	nd information silos. Agile practices should make us better and make work 
+	easier. Let&#8217\;s share successful practices and grow together.<o:p></o
+	:p></p><p class=MsoNormal style='line-height:150%'><b>Who:</b> Anybody who
+	 helps API succeed. This is an open Community that welcomes everyone no ma
+	tter what role or what product they work with.<o:p></o:p></p><p class=MsoN
+	ormal><o:p>&nbsp\;</o:p></p><p class=MsoNormal><img border=0 width=372 hei
+	ght=273 style='width:3.875in\;height:2.8416in' id="Picture_x0020_1" src="c
+	id:image002.jpg@01D50EFA.ADA210B0" alt="Related image"><o:p></o:p></p><p c
+	lass=MsoNormal><span style='font-size:8.0pt'><o:p>&nbsp\;</o:p></span></p>
+	<p class=MsoPlainText>....................................................
+	..........................................................................
+	...........<o:p></o:p></p><p class=MsoPlainText><span style='font-size:8.0
+	pt'><o:p>&nbsp\;</o:p></span></p><p class=MsoNormal style='text-autospace:
+	none'><a name=OutJoinLink><span style='font-size:14.0pt\;font-family:Wingd
+	ings\;color:#0066CC'>&agrave\;</span></a><span style='mso-bookmark:OutJoin
+	Link'><span style='font-size:14.0pt\;color:#0066CC'> </span></span><a href
+	="https://meet.lync.com/gecompany/briankendl/9HY3SNDK"><span style='mso-bo
+	okmark:OutJoinLink'><span style='font-size:16.0pt\;color:#0066CC'>Join Sky
+	pe Meeting</span></span><span style='mso-bookmark:OutJoinLink'></span></a>
+	<span style='mso-bookmark:OutJoinLink'><span style='font-size:14.0pt'>&nbs
+	p\; <a name=OutSharedNoteBorder>&nbsp\;</a>&nbsp\;&nbsp\;<a name=OutShared
+	NoteLink>&nbsp\;</a></span></span><span style='font-size:14.0pt'><o:p></o:
+	p></span></p><p class=MsoNormal style='mso-margin-top-alt:3.0pt\;margin-ri
+	ght:0in\;margin-bottom:12.0pt\;margin-left:16.0pt\;text-autospace:none'><s
+	pan style='font-size:10.0pt'>Trouble Joining? <u><a href="https://meet.lyn
+	c.com/gecompany/kelly.ocallaghan/0CCGV74H?sl=1"><span style='color:#0066CC
+	'>Try Skype Web App</span></a> </u><o:p></o:p></span></p><p class=MsoPlain
+	Text>Toll-free Number: +1 (866) 799-9419<o:p></o:p></p><p class=MsoPlainTe
+	xt>Access Code: 55839877#<o:p></o:p></p><p class=MsoNormal style='margin-b
+	ottom:2.0pt\;text-autospace:none'><u><span lang=EN style='color:#943634'><
+	a href="https://dialin.lync.com/3b1b589b-832c-4e00-bdff-8d1ce50e34e7?id=25
+	058452"><span style='color:#0066CC'>Find a local number</span></a></span><
+	/u><span lang=EN> <o:p></o:p></span></p><p class=MsoPlainText>&nbsp\;<o:p>
+	</o:p></p><p class=MsoNormal><o:p>&nbsp\;</o:p></p><p class=MsoNormal><o:p
+	>&nbsp\;</o:p></p></div></body></html>
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MS-OLK-APPTSEQTIME:20190520T155630Z
+X-MS-OLK-AUTOFILLLOCATION:FALSE
+X-MS-OLK-CONFTYPE:0
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+END:VALARM
+END:VEVENT
+END:VCALENDAR

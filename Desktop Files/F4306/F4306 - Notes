@@ -1,0 +1,623 @@
+
+
+
+**********************************************************
+
+F4306
+Week View (Needs Section)
+Staffing Totals Summary
+
+**********************************************************
+
+
+
+
+
+
+
+
+
+
+    TODO:
+    -
+        done //* Description for "US25680: Service - Part 2 - Staffing Plan Coverage Variances" is confusing. There are two calculations shown.
+       
+        ask about builds releases
+
+    GLOSSARY:
+    -
+
+		- Actual
+			Total hours posted as shifts.
+		
+		- CSP (Core Staffing Plan)
+			Total number of hours by needs displayed for activities within Coverage Period.
+
+		- Coverage Period
+			Number of hours defined in configuration for a coverage period.
+			For the tab in Weekly View, default "D" could be 0700 - 8, meaning 8 coverage hours.
+		
+		- Variance
+			The result of (CSP Needs - Actual) / Coverage Period Hours. 
+            ?The result of (Actual - CSP Needs) / total mins in Coverage Period 
+
+
+	
+    VARIANCE CALCULATION:
+    -
+    
+		
+		var CSP = 7;
+		var Actual = 6;
+		var CoveragePeriod = 8;
+		
+		var Difference = CSP - Actual;
+		
+		var Variance = Difference / CoveragePeriod;
+		
+		console.log(Variance);
+		
+		Result: 0.125
+
+
+	
+  
+
+		
+		
+	
+    REQUIREMENTS:
+    -
+
+        --- Week View Display ---
+
+
+        @SRS_TM_F4306.001
+
+        The initial "Week View" shall include, for each profile and day combination, the display of staffing need and coverage values as D, E1, E2, N with D=8 hours, E1=4 hours, E2=4 hours, N=8 hours.
+        The breakout of the 8, 4, 4, 8 hour coverage periods shall begin with the same time as the first coverage period start time on or after the post time for the department's assigned coverage set.
+        The values in the D, E1, E2, N coverage periods shall be an average of the staffing for the time period the coverage period spans (with the variance displayed.
+        
+        Notes
+            The department assigned coverage set is configured within the department Staffing Configuration screen, Coverage Set field.
+            Note: Staffing Configurations can be configured at any organization level, so to identify the correct Staffing Configuration, start looking at the lowest organization level and work up by organization level until a Staffing Configuration is found.
+        
+        
+        
+        This shall include any activity code which is set to "count toward coverage" (Indicator - SS Solution Standard 2).
+        The calculation shall use the exact times of the activity code for the staffing need, or the exact times of the employee activity for the coverage, allocated to the applicable coverage period.
+        ##US25638##
+        ##US25680##
+
+
+        
+
+        @SRS_TM_F4306.002
+        The user shall have the ability to open a summary of the staffing totals for a profile/day.
+        ##US25637## ##US25639##
+
+
+
+        --- Summary Display ---
+
+        @SRS_TM_F4306.003
+        The system shall display a section for each coverage period for the assigned coverage set for the department (within the Staffing Configuration for the department).
+        This may not be the same number of coverage periods that are displayed in the tab.
+        The system shall display a bar for any activity code that is unfilled, including how many, within the coverage period the activity code starts within.
+        The bar shall be represented in an identifiable color.
+        ##US25636## ##US25639##
+
+
+        @SRS_TM_F4306.004
+        The system shall display a bar for any activity code that is overstaffed (either exceeds the core staffing plan, or not included in the core staffing plan), including how many, within the coverage period the activity code starts within.
+        The bar shall be represented in an identifiable color.
+        ##US25636## ##US25639##
+
+
+        @SRS_TM_F4306.005
+        The system shall display a bar for any activity code that has had the start time or hours adjusted, including how many, within the coverage period the activity code starts within.
+        The bar shall be represented in an identifiable color.
+        LG Note: This requirement may be removed if it becomes a bugaboo, but would be nice to have as it tells a more complete story of the activity code mix.
+        ##US25636## ##US25679## ##US25640##
+
+
+        @SRS_TM_F4306.006
+        If the summary view does not have any bars to display, a message will display.
+        The coverage period labels will display with or without a bar.
+        ##US25636##
+
+
+        @SRS_TM_F4306.007
+        Within the summary view, the system shall display the coverage variance (may be understaffed, overstaffed, or equivalent) for each coverage period.
+        Note: This was added after the change to only show four coverage periods in the tab.
+
+
+        @SRS_TM_F4306.008
+        In the summary view, if there is a schedule that starts outside of an existing coverage period (in the case that the coverage set does not span 24 hours), the system shall display a message. The actual schedules will not be displayed.	
+		
+        
+        
+        
+        
+        
+        
+        
+        
+        Old-   The initial "Week View" shall include, for each profile and day combination, the display of staffing need and coverage values, aggregated by the Coverage Periods in the Default Coverage Set for the Organization Unit (from Staffing Configuration).  This shall include any activity code which is set to "count toward coverage" (Indicator - SS Solution Standard 2).  The calculation shall use the exact times of the activity code for the staffing need, or the exact times of the employee activity for the coverage, allocated to the applicable coverage period.  The staffing need and coverage values shall be the AVERAGE level for the duration of that coverage period.
+			
+		
+		
+    REMOVED:
+	
+	
+		Verified In
+
+		TM 2018.1 - Dev2Team1
+
+
+
+		_________________________________________________  1. Show Coverage Period Sections  _________________________________________________
+
+		@SRS_TM_F4306.003
+
+
+
+		Action
+		In supported browsers, login to the TM portal as admin and navigate to Actions > Schedule > Org Unit(s) > Weekly View.
+
+		Select a week and role group, then click Apply.
+
+		Click a tab for a day in the Weekly View to open the staffing drawer.
+
+		Open a new tab, login to the TM portal as admin and navigate to Configuration > Staffing Configuration.
+
+		Use the search fields to locate the organization unit you are working within (in the Weekly View), then click the folder icon to open its staffing configuration settings.
+
+		Locate the "Coverage Set Code" field and copy the displayed value.
+
+		Navigate to Configuration > Coverage Set.
+
+		In the "Code" field, paste the coverage set code that you copied, click Search, then click the folder icon to open the coverage set settings.
+
+		Previous Day Coverage Period(s)
+
+		Note the time value displayed for the "Post Time" field (this post time will be used to calculate for previous day coverage periods).
+
+		Click Coverage Periods (in the left panel).
+
+		Using the start and end times displayed for each coverage period, locate any coverage periods which cross over midnight (00:00), or start on or after midnight but before the post time configured for the coverage set. These qualify as "previous day" coverage periods.
+
+		For each of these coverage periods, compare against the coverage periods displayed in the Weekly View.
+
+		Current Day Coverage Periods
+
+		From the coverage set General screen, click Coverage Periods (in the left panel).
+
+		For each of the coverage periods displayed for the coverage set, compare against the coverage periods displayed in the Weekly View.
+
+		Display Format
+
+		From the coverage set General screen, click Coverage Periods (in the left panel).
+
+		Note the start times assigned to each coverage period in the coverage set.
+
+		Using the codes and descriptions, cross reference these start times to the corresponding coverage periods displayed in the Weekly View.
+
+		Observe the display formatting int the Weekly View.
+
+
+		Expected Result
+
+		Previous Day Coverage Period(s)
+
+		Each coverage period determined to qualify as "previous day" should be displayed as a section in the staffing drawer.
+
+		For each "previous day" section, a code and description header should be displayed and match what is defined in the coverage set configuration.
+
+		To the right of the code and description should be the text, "(previous day)".
+
+		All activity bars displayed under the "previous day" sections should be formatted with grey text and a white (transparent) background.
+
+		Variance numbers, conditional messages, and additional activity bar formatting will be tested under separate test cases.
+
+		Current Day Coverage Periods
+
+		Each coverage period configured in the coverage set should be displayed as a section in the staffing drawer (coverage periods that qualify as "previous day" will be displayed for both the previous day and the current day, with an indicator message only for the previous day).
+
+		For each coverage period section, a code and description header should be displayed and match what is defined in the coverage set configuration.
+
+		Variance numbers, conditional messages, and activity bar formatting will be tested under separate test cases.
+
+		Display Format
+
+		Coverage sets should be displayed in chronological order from left to right, with "previous day" coverage periods displayed (if present) before current day, with vertical wrapping.
+
+		Coverage set wrapping should be responsive to window resizing.
+
+		Variance numbers, conditional messages, and activity bar formatting will be tested under separate test cases.
+
+
+		Actual Result
+
+		Previous Day Coverage Period(s)
+
+		Each coverage period determined to qualify as "previous day" is displayed as a section in the staffing drawer.
+
+		For each "previous day" section, a code and description header is displayed and matches what is defined in the coverage set configuration.
+
+		To the right of the code and description is the text, "(previous day)".
+
+		All activity bars displayed under the "previous day" sections are formatted with grey text and a white (transparent) background.
+
+		Current Day Coverage Periods
+
+		Each coverage period configured in the coverage set is displayed as a section in the staffing drawer (coverage periods that qualify as "previous day" are displayed for both the previous day and the current day, with an indicator message only for the previous day).
+
+		For each coverage period section, a code and description header is displayed and matches what is defined in the coverage set configuration.
+
+		Display Format
+
+		Coverage sets are displayed in chronological order from left to right, with "previous day" coverage periods displayed (if present) before current day, with vertical wrapping.
+
+		Coverage set wrapping is responsive to window resizing.
+
+		__________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+		_______________________________________________  2. Show Bar for Understaffed Activities  ________________________________________________
+
+
+
+		Action
+		In supported browsers, login to the TM portal as admin and navigate to Actions > Schedule > Org Unit(s) > Weekly View.
+
+		Select a week and role group, then click Apply.
+
+
+
+		Expected Result
+
+
+
+
+
+		Actual Result
+
+
+		__________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+		_______________________________________________  3. Show Bar for Overstaffed Activities  ________________________________________________
+
+
+
+		Action
+		In supported browsers, login to the TM portal as admin and navigate to Actions > Schedule > Org Unit(s) > Weekly View.
+
+		Select a week and role group, then click Apply.
+
+
+
+		Expected Result
+
+
+
+
+
+		Actual Result
+
+
+		__________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+		______________________________________________  4. Show Message for Balanced Activities  _______________________________________________
+
+
+
+		Action
+		In supported browsers, login to the TM portal as admin and navigate to Actions > Schedule > Org Unit(s) > Weekly View.
+
+		Select a week and role group, then click Apply.
+
+
+
+		Expected Result
+
+
+
+
+
+		Actual Result
+
+
+		__________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+		____________________________________________________  5. Show Coverage Variance  _____________________________________________________
+
+
+
+		Action
+		In supported browsers, login to the TM portal as admin and navigate to Actions > Schedule > Org Unit(s) > Weekly View.
+
+		Select a week and role group, then click Apply.
+
+
+
+		compare against WFM page
+
+
+
+
+
+
+
+		Expected Result
+
+
+
+
+
+		Actual Result
+
+
+		__________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+		Acceptance Result:  Pass/Fail
+				
+		
+		
+		
+		
+		Notes:							
+
+				
+		Show Coverage Period Sections
+		@SRS_TM_F4306.003
+		Show Coverage period code AND coverage period description on each column
+		The system shall display a section for each coverage period for the assigned coverage set for the department (within the Staffing Configuration for the department).
+
+
+
+		Show Bar for Understaffed Activities
+		@SRS_TM_F4306.003
+		The system shall display a bar for any activity code that is unfilled, including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		Understaffed bars are orange, with Need #
+
+
+
+		Show Bar for Overstaffed Activities
+		@SRS_TM_F4306.004
+		The system shall display a bar for any activity code that is overstaffed (either exceeds the core staffing plan, or not included in the core staffing plan), including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		Overstaffed bars are blue, with Over #
+
+
+
+		Show Message for When No Bars to Display
+		@SRS_TM_F4306.006
+		If the summary view does not have any bars to display, a message will display. The message shall be conditional on the situation occurring within that coverage period.
+		The coverage period labels will display with or without a bar.
+		Conditional situations:
+		If the variance in the coverage period is 0 (need appropriately met), only a situation specific message will appear (no icon). "Fully staffed. No staffing adjustments needed."
+		If the variance is a negative value (staffing need is short for the coverage period), an icon and situation specific message will appear. "Understaffed. No shifts that start in this coverage period are available. See prior coverage periods to make staffing adjustments."
+		If the variance is a positive value (staffing need is over for the coverage period), an icon and situation specific message will appear. "Overstaffed. See prior coverage periods to make staffing adjustments."
+		Old- Balanced activities do not show a bar at all - they show a message.
+
+
+
+		Show Coverage Variance
+		@SRS_TM_F4306.007
+		Within the summary view, the system shall display the coverage variance (may be understaffed, overstaffed, or equivalent) for each coverage period.
+		Note: This was added after the change to only show four coverage periods in the tab.
+		Show variance number per coverage period
+
+
+		Sort Activities Chronologically
+		The activities should be in ...chronological order or "order of occurrence". not just by time. example: N1 is 11pm-3am. Activities should be ordered like: 2300-8, 0100-8, 0230-8 etc 
+
+
+		___________________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+		NOTES:
+		Show Coverage period code AND coverage period description on each column (this is different from the comp, but was a request from LG)
+		Understaffed bars are orange, with Need #
+		Overstaffed bars are blue, with Over #
+		Balanced activities do not show a bar at all - they show a message. Talk to Dean about what text. Kristi suggested "looks good"
+		NEW: Show variance number per coverage period
+		NEW: The activities should be in ...chronological order or "order of occurrence". not just by time. example: N1 is 11pm-3am. Activities should be ordered like: 2300-8, 0100-8, 0230-8 etc 
+
+
+
+
+
+
+		,
+
+
+		ACCEPTANCE CRITERIA:
+
+		@SRS_TM_F4306.003
+		The system shall display a section for each coverage period for the assigned coverage set for the department (within the Staffing Configuration for the department).
+		(This may not be the same number of coverage periods that are displayed in the tab.)
+
+		The system shall display a bar for any activity code that is unfilled, including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		##US25636## ##US25639##
+
+
+		@SRS_TM_F4306.004
+		The system shall display a bar for any activity code that is overstaffed (either exceeds the core staffing plan, or not included in the core staffing plan), including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		##US25636## ##US25639##
+
+
+		@SRS_TM_F4306.006
+		If the summary view does not have any bars to display, a message will display. The message shall be conditional on the situation occurring within that coverage period.
+		The coverage period labels will display with or without a bar.
+		##US25636##
+
+		Conditional situations:
+		If the variance in the coverage period is 0 (need appropriately met), only a situation specific message will appear (no icon). "Fully staffed. No staffing adjustments needed."
+		If the variance is a negative value (staffing need is short for the coverage period), an icon and situation specific message will appear. "Understaffed. No shifts that start in this coverage period are available. See prior coverage periods to make staffing adjustments."
+		If the variance is a positive value (staffing need is over for the coverage period), an icon and situation specific message will appear. "Overstaffed. See prior coverage periods to make staffing adjustments."
+
+
+		@SRS_TM_F4306.007
+		Within the summary view, the system shall display the coverage variance (may be understaffed, overstaffed, or equivalent) for each coverage period.
+		Note: This was added after the change to only show four coverage periods in the tab.
+
+
+
+
+
+		___________________________________________________________________________________________________________________________________________________________
+
+
+
+		Show Coverage period code AND coverage period description on each column
+
+
+		The system shall display a section for each coverage period for the assigned coverage set for the department (within the Staffing Configuration for the department).
+
+
+		The system shall display a bar for any activity code that is unfilled, including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		Understaffed bars are orange, with Need #
+
+
+		The system shall display a bar for any activity code that is overstaffed (either exceeds the core staffing plan, or not included in the core staffing plan), including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		Overstaffed bars are blue, with Over #
+
+
+		If the summary view does not have any bars to display, a message will display.
+		(The coverage period labels will display with or without a bar.)
+		Balanced activities do not show a bar at all - they show a message.
+
+
+		Within the summary view, the system shall display the coverage variance (may be understaffed, overstaffed, or equivalent) for each coverage period.
+		Note: This was added after the change to only show four coverage periods in the tab.
+		Show variance number per coverage period
+
+
+
+
+		___________________________________________________________________________________________________________________________________________________________
+
+
+
+
+		Show Coverage Period Sections
+		Show Coverage period code AND coverage period description on each column
+		The system shall display a section for each coverage period for the assigned coverage set for the department (within the Staffing Configuration for the department).
+		Show Bar for Understaffed Activities
+		The system shall display a bar for any activity code that is unfilled, including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		Understaffed bars are orange, with Need #
+		Show Bar for Overstaffed Activities
+		The system shall display a bar for any activity code that is overstaffed (either exceeds the core staffing plan, or not included in the core staffing plan), including how many, within the coverage period the activity code starts within.
+		The bar shall be represented in an identifiable color.
+		Overstaffed bars are blue, with Over #
+		Show Message for Balanced Activities
+		If the summary view does not have any bars to display, a message will display. (The coverage period labels will display with or without a bar.)
+		Balanced activities do not show a bar at all - they show a message.
+		Show Coverage Variance
+		Within the summary view, the system shall display the coverage variance (may be understaffed, overstaffed, or equivalent) for each coverage period.
+		Note: This was added after the change to only show four coverage periods in the tab.
+		Show variance number per coverage period
+
+
+
+
+
+
+
+
+
+		show next day? 
+
+		previous day coverage periods will be any coverage periods prior to the post time and backwards to start or overlap midnight
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

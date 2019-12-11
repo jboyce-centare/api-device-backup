@@ -1,0 +1,540 @@
+//<copyright file="staffing-by-coverage-period-drawer.service.spec.ts" company="Virence Health">
+// Copyright © 2019 Virence Health.  All rights reserved.  Confidential and Proprietary.
+//</copyright>
+import { StaffingByCoveragePeriodService } from './staffing-by-coverage-period-drawer.service';
+import { StaffingCoverageDrawerOpenedEvent } from '../models/staffing-coverage-drawer-opened-event';
+import moment from 'moment';
+import { Subject } from 'rxjs/Subject';
+import { ComponentRef, Renderer2 } from '@angular/core';
+import { WfmPopoverComponent } from '../../../shared/popover/popover.component';
+import { BehaviorSubject } from 'rxjs';
+import { DocumentRef } from '../../../shared/document-ref/document-ref.service';
+import { MessagingService } from "../../../shared/messaging/messaging.service";
+import { MessageSeverity } from '../../../shared/toast/models/wfm-message-severity';
+import { Events } from 'ionic-angular';
+import { ToastEvents } from '../../../shared/toast/models/wfm-toast-events';
+import { ToastOptions } from '../../../shared/toast/models/wfm-toast-options.model';
+
+
+
+
+fdescribe('StaffingByCoveragePeriodService', () => {
+  let service: StaffingByCoveragePeriodService;
+  let drawerClosingSubject: Subject<StaffingCoverageDrawerOpenedEvent>, drawerOpeningSubject: Subject<StaffingCoverageDrawerOpenedEvent>;
+  // let documentRef: DocumentRef;
+  // let messageService: MessagingService;
+  // let events: Events;
+  let mockMessageService: jasmine.SpyObj<MessagingService>;
+  let mockEvents: jasmine.SpyObj<Events>;
+  let mockDocumentRef: jasmine.SpyObj<DocumentRef>;
+  let mockRenderer: jasmine.SpyObj<Renderer2>;
+  let docRefQuerySelectorSpy;
+
+
+
+  let buildComponent = (): StaffingByCoveragePeriodService => {
+   
+   
+    
+    // mockRenderer = jasmine.createSpyObj('Renderer2', ['removeClass', 'addClass']);
+    
+    mockDocumentRef = jasmine.createSpyObj('DocumentRef', ['getDocument']);
+    docRefQuerySelectorSpy = jasmine.createSpy('querySelector').and.returnValue({ classList: ['wf-messaging'] });
+    mockDocumentRef.getDocument.and.returnValue({ querySelector: docRefQuerySelectorSpy }).and.returnValue({ querySelector: docRefQuerySelectorSpy });
+
+
+
+
+    mockMessageService = jasmine.createSpyObj("MessagingService", ["setMessage", "dismiss", "getMessages"]);
+    mockEvents = jasmine.createSpyObj('Events', ['publish', 'subscribe']);
+
+
+
+
+
+
+    service = new StaffingByCoveragePeriodService(mockDocumentRef, mockMessageService, mockEvents)
+    return service;
+  }
+
+  beforeEach(() => {
+    drawerClosingSubject = new Subject<StaffingCoverageDrawerOpenedEvent>();
+    drawerOpeningSubject = new Subject<StaffingCoverageDrawerOpenedEvent>();
+    buildComponent();
+    // new StaffingByCoveragePeriodService(mockDocumentRef, mockMessageService, mockEvents);
+    (<any>service).drawerClosingSubject = drawerClosingSubject;
+    (<any>service).drawerOpeningSubject = drawerOpeningSubject;
+  });
+
+  describe('#currentDrawer', () => {
+    const drawer: StaffingCoverageDrawerOpenedEvent = new StaffingCoverageDrawerOpenedEvent('49', '30', moment('2019-02-01', 'YYYY-MM-DD'), false);
+
+    describe('#get', () => {
+      let result: StaffingCoverageDrawerOpenedEvent;
+
+      beforeEach(() => {
+        (<any>service)._currentDrawer = drawer;
+        result = service.currentDrawer;
+      });
+
+      it('should return the _currentDrawer', () => {
+        expect(result).toEqual(drawer);
+      });
+    });
+
+    describe('#set', () => {
+      beforeEach(() => {
+        (<any>service)._currentDrawer = null;
+        service.currentDrawer = drawer;
+      });
+
+      it('should return the _currentDrawer', () => {
+        expect((<any>service)._currentDrawer).toEqual(drawer);
+      });
+    });
+  });
+
+  describe('#drawerShowing', () => {
+    let result: boolean;
+    describe('when a drawer is showing', () => {
+      beforeEach(() => {
+        (<any>service)._componentRef = {
+          componentType: WfmPopoverComponent
+        } as ComponentRef<WfmPopoverComponent>;
+        result = service.drawerShowing;
+      });
+
+      it('should return true', () => {
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('when a drawer is not showing', () => {
+      beforeEach(() => {
+        (<any>service)._componentRef = null;
+        result = service.drawerShowing;
+      });
+
+      it('should return false', () => {
+        expect(result).toEqual(false);
+      });
+    });
+  });
+
+  describe('#drawerShowingUpdates', () => {
+    let asObservableSpy;
+
+    beforeEach(() => {
+      let subject = new BehaviorSubject<boolean>(false);
+      asObservableSpy = spyOn(subject, 'asObservable');
+      (<any>service)._drawerShowingUpdates = subject;
+      service.drawerShowingUpdates;
+    });
+
+    it('should return an Observable', () => {
+      expect(asObservableSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('#componentRef', () => {
+    const componentRef: ComponentRef<WfmPopoverComponent> = { componentType: WfmPopoverComponent } as ComponentRef<WfmPopoverComponent>;
+
+    describe('#get', () => {
+      let result: ComponentRef<WfmPopoverComponent>;
+      beforeEach(() => {
+        (<any>service)._componentRef = componentRef;
+        result = service.componentRef;
+      });
+
+      it('should return the _componentRef', () => {
+        expect(result).toEqual(componentRef);
+      });
+    });
+
+    describe('#set', () => {
+      let nextSpy;
+
+      beforeEach(() => {
+        let subject = new BehaviorSubject<boolean>(false);
+        nextSpy = spyOn(subject, 'next');
+        (<any>service)._drawerShowingUpdates = subject;
+        (<any>service)._componentRef = null;
+
+        service.componentRef = componentRef;
+      });
+
+      it('should set _componentRef', () => {
+        expect((<any>service)._componentRef).toEqual(componentRef);
+      });
+
+      it('should notify observers that a change occurred', () => {
+        expect(nextSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
+  describe('#destroy', () => {
+    let destroy;
+
+    beforeEach(() => {
+      destroy = jasmine.createSpy('destroy');
+    });
+
+    describe('#get', () => {
+      let result: Function;
+
+      beforeEach(() => {
+        (<any>service)._destroy = destroy;
+        result = service.destroy;
+      });
+
+      it('should return _destroy', () => {
+        expect(result).toEqual(destroy);
+      });
+    });
+
+    describe('#set', () => {
+      beforeEach(() => {
+        (<any>service)._destroy = null;
+        service.destroy = destroy;
+      });
+
+      it('should set _destroy', () => {
+        expect((<any>service)._destroy).toEqual(destroy);
+      });
+    });
+  });
+
+
+  describe('#drawerOpening', () => {
+    let nextSpy;
+    let drawer: StaffingCoverageDrawerOpenedEvent;
+
+    beforeEach(() => {
+      drawer = new StaffingCoverageDrawerOpenedEvent('49', '30', moment('2019-02-01', 'YYYY-MM-DD'), false);
+      nextSpy = spyOn(drawerOpeningSubject, 'next');
+      (<any>service)._currentDrawer = null;
+      service.drawerOpening(drawer);
+    });
+
+    it('should notify observers that a drawer opened', () => {
+      expect(nextSpy).toHaveBeenCalledWith(drawer);
+    });
+
+    it('should set currentDrawer', () => {
+      expect((<any>service)._currentDrawer).toEqual(drawer);
+    });
+  });
+
+  describe('#subscribeDrawerOpeningListener', () => {
+    let asObservableSpy;
+
+    beforeEach(() => {
+      asObservableSpy = spyOn(drawerOpeningSubject, 'asObservable');
+      service.subscribeDrawerOpeningListener();
+    });
+
+    it('should return an observable for the drawer closing subject', () => {
+      expect(asObservableSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+
+
+
+
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+  describe('#getClassList', () => {
+
+    beforeEach(() => {
+      buildComponent();
+    });
+
+    it('should call getDocument() and return a string array of class names', () => {
+      let result = service.getClassList("wf-messaging");
+      expect(mockDocumentRef.getDocument).toHaveBeenCalledTimes(1);
+      expect(docRefQuerySelectorSpy).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(['wf-messaging']);
+    });
+  });
+
+
+  describe('#hideTopBanners', () => {
+
+    beforeEach(() => {
+      buildComponent();
+      
+      service.getClassList("wf-messaging");
+      
+
+    let mockService = jasmine.createSpyObj('StaffingByCoveragePeriodService', ['getClassList']);
+    let mockAdd = jasmine.createSpy('add');
+    mockService.getClassList.and.returnValue({ add: mockAdd });
+      
+    });
+
+    it('should call add', () => {
+      expect(getClassList).toHaveBeenCalledTimes(2);
+    });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // describe('#getClass', () => {
+
+
+  //   beforeEach(() => {
+  //     buildComponent();
+  //     service.hideTopBanners();
+  //   });
+
+  //   it('should return an observable for the drawer closing subject', () => {
+  //     expect(service.hideTopBanners()).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+
+
+
+
+
+
+
+
+
+  // describe('#hideTopBanners', () => {
+  //   let selectorSpy, classListSpy1, classListSpy2, mockDocument, leftElement, rightElement;
+
+  //   beforeEach(() => {
+
+
+  //     buildComponent();
+
+  //     // classListSpy1 = jasmine.createSpyObj('classList', ['add']);
+  //     // classListSpy1.add.and.callThrough();
+
+  //     classListSpy1 = jasmine.createSpyObj('classList', ['remove']);
+  //     classListSpy1.remove.and.callThrough();
+
+
+  //     leftElement = { classList: classListSpy1 };
+
+
+  //     selectorSpy = jasmine.createSpy('querySelector').and.callFake((className) => {
+  //       if (className == '.hide-banner') {
+  //         return leftElement;
+  //       }
+  //     });
+
+
+  //     mockDocument = {
+  //       querySelector: selectorSpy
+  //     };
+  //     mockDocumentRef.getDocument.and.returnValue(mockDocument);
+
+
+  //     service.unhideTopBanners();
+  //     jasmine.clock().tick(1);
+
+  //     it('should get the icons', () => {
+  //       expect(mockDocumentRef.getDocument).toHaveBeenCalled();
+  //       expect(mockDocument.querySelector).toHaveBeenCalledWith('wf-messaging');
+  //       // expect(mockDocument.querySelector).toHaveBeenCalledWith('.ui-datepicker-next');
+  //     });
+
+  //     it('should add the previous icon classes to the left button class lists', () => {
+  //       expect(leftElement.classList.remove).toHaveBeenCalledWith('.hide-banner');
+  //       // expect(leftElement.classList.add).toHaveBeenCalledWith('icon-ge-chevron_left');
+  //     });
+
+
+
+
+  // service = buildComponent();
+  // selectorSpy =
+  //   jasmine.createSpy('querySelector').and.callFake((className) => {
+  //     if (className == 'wf-messaging') {
+  //       return true;
+  //     }
+  //   });
+
+  // if (nservice.getClassList('wf-messaging').contains("hide-banner")) {
+  //   nservice.getClassList('wf-messaging').remove("hide-banner")
+  // }
+  // if (nservice.getClassList('wfm-toast').contains("hide-banner")) {
+  //   nservice.getClassList('wfm-toast').remove("hide-banner")
+  // }
+  // nservice.hideTopBanners();
+
+
+  //     it('should add classes---------', () => {
+  //       expect(selectorSpy).toEqual(true);
+  //       // expect(service.getClassList('wf-messaging').contains("hide-banner")).toEqual(true);
+  //       // expect(service.getClassList('wfm-toast').contains("hide-banner")).toEqual(true);
+  //     });
+  //   });
+
+  // });
+
+
+
+  // public hideTopBanners() {
+  //   this.documentRef.getDocument().querySelector('wf-messaging').classList.add("hide-banner");
+  //   this.documentRef.getDocument().querySelector('wfm-toast').classList.add("hide-banner");
+  // }
+
+
+
+
+
+  // describe('#unhideTopBanners', () => {
+  //   let asObservableSpy;
+
+  //   beforeEach(() => {
+  //     asObservableSpy = spyOn(drawerOpeningSubject, 'asObservable');
+  //     service.subscribeDrawerOpeningListener();
+  //   });
+
+  //   it('should return an observable for the drawer closing subject', () => {
+  //     expect(asObservableSpy).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+  // public unhideTopBanners() {
+  //   this.documentRef.getDocument().querySelector('wf-messaging').classList.remove("hide-banner");
+  //   this.documentRef.getDocument().querySelector('wfm-toast').classList.remove("hide-banner");
+  // }
+
+
+
+
+
+  // describe('#displaySuccessBanner', () => {
+  //   let asObservableSpy;
+
+  //   beforeEach(() => {
+  //     asObservableSpy = spyOn(drawerOpeningSubject, 'asObservable');
+  //     service.subscribeDrawerOpeningListener();
+  //   });
+
+  //   it('should return an observable for the drawer closing subject', () => {
+  //     expect(asObservableSpy).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+  // public displaySuccessBanner() {
+  //   this.toastOptions = new ToastOptions(MessageSeverity.SUCCESS, 'success', 'staffing-coverage-drawer.success-banner-text')
+  //   this.events.publish(ToastEvents.SHOW_AUTO_DISMISS_TOAST, this.toastOptions);
+  // }
+
+
+
+
+
+  // describe('#displayErrorBanner', () => {
+  //   let asObservableSpy;
+
+  //   beforeEach(() => {
+  //     asObservableSpy = spyOn(drawerOpeningSubject, 'asObservable');
+  //     service.subscribeDrawerOpeningListener();
+  //   });
+
+  //   it('should return an observable for the drawer closing subject', () => {
+  //     expect(asObservableSpy).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+  // public displayErrorBanner() {
+  //   this.dismissBanners()
+  //   this.messageService.setMessage({
+  //     severity: 'error',
+  //     text: 'staffing-coverage-drawer.error-banner-text',
+  //     dismissed: false,
+  //     title: 'Error',
+  //     duration: 0,
+  //     showMessage: true
+  //   });
+  // }
+
+
+
+
+
+  // describe('#dismissBanners', () => {
+  //   let asObservableSpy;
+
+  //   beforeEach(() => {
+  //     asObservableSpy = spyOn(drawerOpeningSubject, 'asObservable');
+  //     service.subscribeDrawerOpeningListener();
+  //   });
+
+  //   it('should return an observable for the drawer closing subject', () => {
+  //     expect(asObservableSpy).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+  // public dismissBanners() {
+  //   let messages = this.messageService.getMessages();
+  //   for (let i = 0; i < messages.length; i++) {
+  //     this.messageService.dismiss(i);
+  //   }
+  //   if (this.toastOptions) {
+  //     this.events.publish(ToastEvents.DISMISS, this.toastOptions);
+  //   }
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
