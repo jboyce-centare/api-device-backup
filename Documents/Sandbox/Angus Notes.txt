@@ -1,0 +1,63 @@
+
+
+
+
+Questions:
+
+	Agile
+		What role should I fill?
+		What do I need to know?
+		How do I drive Agile practices?
+		https://devcloud.swcoe.ge.com/devspace/display/UZKQV/Scrum+Team+Guidelines
+
+	Perforce
+		Changelist - local
+		Shelving - cloud
+		
+	Misc
+		How do you work best?
+		What is your learning process?
+		
+		
+		
+		
+		
+		
+	Retro Ideas
+		Get culture re-adjusted
+			Team bonding
+			Get to know each other
+			Ask team if they notice anything is missing
+				What does this team not have that you wish it had?
+				What gaps can we fill?
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

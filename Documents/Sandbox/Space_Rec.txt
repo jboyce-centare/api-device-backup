@@ -1,0 +1,97 @@
+
+
+
+<wf-sidebar><section class="fixed sidebar">
+    
+    <header class="sidebar-header">
+        <h2 style="color:white;">Peds North/South</h2>
+    </header>
+     
+    
+
+<div style="height:250px; padding-top:19px;">
+
+<wf-schedule-period-carousel>
+<!---->
+<ul style="font-size:17px;" wfloadingplaceholder="">
+  <li>
+      Phase: &nbsp;&nbsp;<b>Posted</b>
+  </li>
+  <li>
+      Employee Issues: &nbsp;&nbsp;<b>83</b>
+  </li><li>
+    Requests: &nbsp;&nbsp;<b>76</b>
+  </li><li>
+    Understaffed: &nbsp;&nbsp;<b>28 Days</b>
+  </li>
+  <li>
+    Overstaffed: &nbsp;&nbsp;<b>5 Days</b>
+  </li>
+  
+
+</ul>
+
+
+</wf-schedule-period-carousel>
+
+</div>
+<header class="sidebar-header">
+        <h5><i class="icon-ge icon-ge-planner icon-sm"></i>Schedule Periods</h5>
+    </header><div style="height:200px;">
+    <wf-schedule-period-carousel><button class="arrow-button" disabled="">
+  <i class="icon-ge icon-sm icon-ge-dropup"></i>
+</button>
+<!---->
+<ul wfloadingplaceholder="">
+  <!----><li>
+    Mar 31 - Apr 27
+    <!----><span class="status">Posted</span>
+  </li><li class="selected">
+    Apr 28 - May 25
+    <!----><span class="status">Balancing</span>
+  </li><li>
+    May 26 - Jun 22
+    <!----><span class="status">Setup</span>
+  </li><li>
+    Jun 23 - Jul 20
+    <!----><span class="status">Setup</span>
+  </li><li>
+    Jul 21 - Aug 17
+    <!----><span class="status">Setup</span>
+  </li>
+    
+    
+    <!--<li>
+    Aug 18 - Sep 14
+    <!--<span class="status">Setup</span>
+  </li>
+    
+    
+    <!--<li>
+    Sep 15 - Oct 12
+    <span class="status">Setup</span>
+  </li><li>
+    
+    
+    <!--
+    Oct 13 - Nov 9
+    <!--<span class="status">Setup</span>
+  </li><li>
+    Nov 10 - Dec 7
+    <!--<span class="status">Setup</span>
+  </li><li>
+    Dec 8 - Jan 4
+    <span class="status">Setup</span>-->
+  
+</ul>
+
+
+<button class="arrow-button">
+  <i class="icon-ge icon-sm icon-ge-dropdown"></i>
+</button>
+</wf-schedule-period-carousel>
+    
+</div>
+   
+    
+</section></wf-sidebar>

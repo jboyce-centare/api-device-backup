@@ -1,0 +1,501 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This is for notes. Pls enjoy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2021 Strategy Session
+
+	Expansion
+		Our goal is to expand, but unsure of when.
+		We will be focusing on the midwest.
+		Most logical place would be Minneapolis.
+		
+		
+	Revenue Diversity
+		We will begin trying to offer recurring revenue by created our own products.
+		2018
+			Individual Contributor: 88%
+			Team-based: 12%
+		2021
+			Individual Contributor: 50%
+			Team-based: 40%
+			Recurring Revenue: 10%
+		Team-based: If we have a PO and we own the backlog.
+
+	
+	Financial Growth
+		2019
+			$15 mil
+			106 employees
+		2021
+			$28 mil
+			180 employees
+				This could include the new location in (potentially) Minneapolis.
+				
+				
+	Potentially reinstating bonuses. This may be in the form of raises.		
+
+
+	Centare Lab
+		Shark Tank-type competitions.
+		Develop our own software based on need patterns.
+		We are going to move into the data space.
+		
+
+* Research SAAS
+
+
+
+
+
+
+
+
+
+Code Walk-through
+
+* Research Ticks -time c#
+* How to handle activities outside of coverage periods.
+* go to highlighted in c#
+* time zone test case
+
+
+
+
+Scheduled activities 
+
+
+
+
+
+
+Unshelve:
+	Search
+		Go To
+			Select Changelist from dropdown, enter changelist number
+				highlight all Shelved Files
+					right click > unshelve
+						Unshelve (make sure delete is unselected)
+							Open VS and reload project
+							
+						
+
+
+
+
+
+
+
+
+
+
+
+
+
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+	Perhaps I am too late with this, but felt I should at least put it out there: have we considered keeping the summary bars but only using the default (DEEN) coverage periods?
+	
+	- If we cut previous day coverage periods and display only DEEN, we'll have four simple sections that correspond directly to what is shown in the tabs. I tried this by removing the element, and it's very intuitive.
+	
+	- This would bring us back to the original, elegant vision of the summary bars that we saw with the "happy path" scenarios. I believe  most everyone found value in this.
+	
+	- There would be almost no additional client training required because we will have already explained DEEN and variances for the tab. Easy to understand.
+	
+	- The "worst case scenario" of two 12 hour shifts would only have two coverage periods with conditional messages, and if we rethink how to display these, that's not a lot to worry about- especially when you're only managing two shifts to begin with.
+	 
+	- Requiring simplicity in the tab numbers made them much more useful, so why not try this with the summary bars? With no summary, the tab numbers seem to lack context with the drawer and feel disjointed from any real utility. 
+	
+	
+	
+	Personal experience just now: I was setting up data in the weekly view, and wanted to get "open" to zero, but didn't know which activity to add. Without even thinking I opened the staffing drawer and with just a glance, knew what I needed. At that moment I felt that there is a legitimate value and savvy in having the quick access summary, without having to plow through the whole field of bars in the expanded view, EVERY TIME you need to make a small change. I think that could get exhausting.
+	There must have been good reason to create the summary view to begin with. If we eliminate confusion and complexity by adopting a user-friendly layout, we may be able to avoid throwing the baby out with the bath water, and preserve some great functionality and accessibility that the expanded view does not offer. Sorry for the novel I just wanted to share these thoughts, thanks!
+	
+
+	
+
+	 
+	
+	
+
+	
+	
+ Split Service Stories
+	- We were regularly underestimating the effort for our service stories in comparison to our UI stories.
+	- Breaking down the service stories made it easier to split up service work between multiple developers. 
+ 
+ Staying Honest in Our Work
+	- There have been times when we were extremely close to finishing stories right before sprint review, and there was the temptation and pressure to create a defect for the remaining work and just accept the story.
+	But we've made a commitment as a team to stay honest in our work, regardless of whether someone gets punched in the face.
+	
+	I think that maintaining that openness and trust not only holds true to the scrum values, but also impacts the quality of work that is produced, as well as the confidence level of the team. 
+ 
+ New Tools
+	- We have looked at using new tools for organizing our work, one of which is the Team Board in Rally (I think a number of other teams are using this as well).
+	- It's not revolutionary but it has definitely helped us to better keep track of the statuses of our stories.
+	- So for teams that don't use the team board, I would recommend checking it out, but the key takeaway is: don't be afraid to try new tools that could help improve productivity and efficiency. 
+	
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	Running schedule Grid Locally
+    - WAS Simulator
+        - Repo here: https://gitlab.cloud.health.ge.com/wfm-dev-tools/mock-was
+        - Message Steve Evans to get access
+        - Read this and run the commands:            https://devcloud.swcoe.ge.com/devspace/display/OWZBD/WAS+Simulator+Getting+Started
+        - Create a local branch when you add an endpoint, create a merge request, share in flowdock for review, then merge it in to master when it is approved
+    - Against deployed system
+    - Against local WAS
+
+	
+https://devcloud.swcoe.ge.com/devspace/display/OWZBD/Schedule+Grid+Cheat+Sheet
+    npm run coverage - code coverage < 100 will cause a warning in jenkins
+    npm run lint
+
+Shared Components WFM repo
+    - https://valhalla-dev01.visualstudio.com/NorthstarUI/NorthstarUI/_git/wfm
+    - DO NOT put an underscore in your git branch name :)
+    - Same process as simulator updates. A build is kicked off ~5-15 min after merging to the master component branch.
+    - After the build succeeds, you need to update the package version in the schedule grid for that component and run npm install to get the new updates.
+        - Make sure to 'check out' the package-lock.json (it should be auto-updated when you run npm install)
+    - http://sc-docs.api-wi.com/ for visuals (edit this by going to /docs/ in the repo - there is an app that powers this page and the build pics up the changes)
+    - Be aware of committing breaking changes for this
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+00:41
+02:24
+03:00
+04:49
+05:43
+02:47
+01:44
+03:54
+04:31
+04:09
+02:52
+02:56
+01:41
+05:18
+04:31
+08:48
+
+
+
+[0041,
+0224,
+0300,
+0449,
+0543,
+0247,
+0144,
+0354,
+0431,
+0409,
+0252,
+0256,
+0141,
+0518,
+0431,
+0848]
+	
+	
+	
+	
+	
+	
+	
+	
+	  <!-- <div *ngIf="noCSPApplied">
+    <section class="no-CSP-banner">
+      <ion-grid>
+        <ion-row align-items-start>
+          <ion-col col-auto>
+            <i class="icon-xsm icon-ge-warning"></i>
+          </ion-col>
+          <ion-col>
+            <h6>{{'staffing-coverage-drawer.no-CSP-banner-title' | translate}}</h6>
+            <p>{{'staffing-coverage-drawer.no-CSP-banner-text' | translate}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </section>
+  </div> -->
+
+  <!-- 
+  <div *ngIf="noCSPApplied">
+    <section class="no-CSP-banner">
+      <div>
+        <div align-items-start>
+          <ion-col col-auto>
+            <i class="icon-xsm icon-ge-warning"></i>
+          </ion-col>
+          <ion-col>
+            <h6>{{'staffing-coverage-drawer.no-CSP-banner-title' | translate}}</h6>
+            <p>{{'staffing-coverage-drawer.no-CSP-banner-text' | translate}}</p>
+          </ion-col>
+        </div>
+      </div>
+    </section>
+  </div> -->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	9/3/19
+	<!-- <div *ngIf="noNeedsApplied">
+  <div class="no-needs-banner">
+    <div class="position-box">
+      <div class="icon-xsm icon-ge-warning">
+      </div>
+      <div class="banner-col">
+        <div class="banner-title">{{'staffing-coverage-drawer.no-needs-message-title' | translate}}</div>
+        <div class="banner-text">{{'staffing-coverage-drawer.no-needs-message-text' | translate}}</div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+  // .no-needs-banner {
+  //   color: color($wfm-colors, text, base);
+  //   background-color: color($wfm-colors, data-orange, base);
+  //   padding: 10px 20px 10px 20px;
+  //   margin-top: 10px;
+  //   margin-bottom: 16px;
+  //   text-align: center;
+  //   width: 100%;
+
+  //   .position-box {
+  //     display: inline-block;
+  //   }
+
+  //   .banner-col {
+  //     display: inline-block;
+  //     padding-left: 10px;
+  //   }
+
+  //   .banner-title {
+  //     font-size: 15px;
+  //     text-align: left;
+  //   }
+
+  //   .banner-text {
+  //     font-size: 13px;
+  //     text-align: left;
+  //     margin-top: 2px;
+  //   }
+
+  //   .icon-ge-warning {
+  //     vertical-align: top;
+  //     display: inline-block;
+  //     font-size: 13px;
+  //     width: 11px;
+  //     height: 9px;
+  //     padding-top: 4px;
+  //     color: color($wfm-colors, text, inverse);
+  //     background-color: color($wfm-colors, data-orange, base);
+  //   }
+  // }
+
+	
+	
+	
+
+
+
+	
+	
+Refinement (Cancelled)
+	
+Pre-Review 8/27 - Boyce
+
+Retro 8/28 - Sravanthi
+
+Planning 8/29 - Kelly
+
+
+
+
+
+<!doctype html>
+<html>
+<head>
+  
+  <!-- Clickjacking (UI Redressing) avoidance -->
+  <style>
+    html {
+      display: none;
+    }
+  </style>
+  <script>
+    if (self == top) {
+      document.documentElement.style.display = 'block';
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <title>Paylocity Time and Attendance</title>
+  <link rel="stylesheet" href="/WebTime/Content/Core/citrus.core2.css"/>
+  <link rel="stylesheet" href="/WebTime/Content/Fonts/paylocity-icons.css"/>
+</head>
+<body class="citrus">
+
+  <div class="bounding-box" style="max-width:480px; margin-top: 40px; text-align: center;">
+    <div class="content-area" style="padding: 20px; box-sizing: border-box; padding-bottom:40px;">
+      <img src="/WebTime/Content/Images/paylocity-logo.svg" style="margin:20px auto; width:200px;">
+      <h3 style="font-weight: bold; color: #C8102E;"><i class="icon-important" style="vertical-align: top; margin-right:8px;"></i>We are having technical difficulties</h3>
+      <p style="margin:20px 0; font-size: 18px;">We could not complete your request. Please accept our apology for this temporary service outage.</p>
+      <p style="margin-bottom: 20px; font-size: 18px;">Please contact your company administrator for further assistance using the following id:<br/>3d4fa925-2a51-4326-9247-a6ae282ec74b</p>
+      <a href="javascript:window.history.back();" style="text-decoration: none;"><i class="icon-return icon-bold size-large" style="vertical-align: sub; margin-right:8px;"></i><span style="text-decoration: underline; font-size:18px;">Go back</span></a>
+    </div>
+
+  </div>
+</body>
+</html>
+
+	
+	
+
+
+
+
+
+
